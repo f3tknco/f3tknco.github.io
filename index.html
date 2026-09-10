@@ -16,7 +16,6 @@
         --line-strong: #b8afa4;
         --accent: #b86232;
         --accent-soft: rgba(184, 98, 50, 0.12);
-        --panel: rgba(250, 248, 244, 0.7);
         --max-width: 1120px;
       }
 
@@ -217,6 +216,7 @@
         display: grid;
         grid-template-columns: 0.78fr 1.22fr;
         gap: clamp(52px, 9vw, 132px);
+        align-items: center;
         padding: clamp(86px, 11vw, 138px) 0;
       }
 
@@ -235,72 +235,88 @@
         line-height: 1.75;
       }
 
-      .field {
-        position: relative;
-        min-height: 420px;
-        border: 1px solid var(--line);
-        border-radius: 28px;
-        background: var(--panel);
-        overflow: hidden;
+      .systems-map {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: visible;
       }
 
-      .field::before,
-      .field::after {
-        content: "";
-        position: absolute;
-        inset: 50% auto auto 50%;
-        width: 72%;
-        height: 1px;
-        background: var(--line);
-        transform-origin: center;
+      .systems-map .boundary-line {
+        stroke: var(--line);
+        stroke-width: 1;
+        stroke-dasharray: 3 7;
+        vector-effect: non-scaling-stroke;
       }
 
-      .field::before {
-        transform: translate(-50%, -50%) rotate(27deg);
-      }
-
-      .field::after {
-        transform: translate(-50%, -50%) rotate(-27deg);
-      }
-
-      .node {
-        position: absolute;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 13px;
-        border: 1px solid var(--line-strong);
-        border-radius: 999px;
-        background: var(--paper);
+      .systems-map .boundary-label {
+        fill: var(--line-strong);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: clamp(0.72rem, 1.1vw, 0.82rem);
-        white-space: nowrap;
+        font-size: 8px;
+        letter-spacing: 1.2px;
       }
 
-      .node::before {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 0 5px var(--accent-soft);
+      .systems-map .route-halo {
+        fill: none;
+        stroke: var(--accent);
+        stroke-opacity: 0.09;
+        stroke-width: 14;
+        stroke-linecap: round;
+        vector-effect: non-scaling-stroke;
       }
 
-      .node[data-domain="applications"] { top: 16%; left: 9%; }
-      .node[data-domain="contracts"] { top: 13%; right: 10%; }
-      .node[data-domain="delivery"] { top: 47%; left: 50%; transform: translate(-50%, -50%); }
-      .node[data-domain="runtime"] { bottom: 15%; left: 11%; }
-      .node[data-domain="boundaries"] { right: 9%; bottom: 17%; }
+      .systems-map .route {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
 
-      .field-caption {
-        position: absolute;
-        right: 22px;
-        bottom: 18px;
-        margin: 0;
-        color: var(--muted);
+      .systems-map .node-ring {
+        fill: var(--paper);
+        stroke: var(--accent);
+        stroke-width: 2;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .systems-map .node-core {
+        fill: var(--accent);
+      }
+
+      .systems-map .stage-index {
+        fill: var(--accent);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.68rem;
+        font-size: 9px;
+        letter-spacing: 1px;
+      }
+
+      .systems-map .stage-name {
+        fill: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        font-size: 24px;
+        font-weight: 580;
+        letter-spacing: -0.7px;
+      }
+
+      .systems-map .stage-note {
+        fill: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9px;
+        letter-spacing: 0.4px;
+      }
+
+      .systems-map .caption {
+        fill: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9px;
+        letter-spacing: 0.8px;
+      }
+
+      .systems-map .caption-mark {
+        fill: var(--accent);
+        font-size: 13px;
       }
 
       .closing {
@@ -324,15 +340,6 @@
         color: var(--muted);
         font-size: 0.9rem;
         line-height: 1.65;
-      }
-
-      .pulse {
-        animation: breathe 3.6s ease-in-out infinite;
-      }
-
-      @keyframes breathe {
-        0%, 100% { opacity: 0.55; }
-        50% { opacity: 1; }
       }
 
       @media (max-width: 760px) {
@@ -383,15 +390,19 @@
           gap: 44px;
         }
 
-        .field {
-          min-height: 360px;
+        .systems-map .stage-name {
+          font-size: 29px;
         }
 
-        .node[data-domain="applications"] { top: 12%; left: 7%; }
-        .node[data-domain="contracts"] { top: 28%; right: 7%; }
-        .node[data-domain="delivery"] { top: 50%; left: 10%; transform: none; }
-        .node[data-domain="runtime"] { bottom: 19%; left: 31%; }
-        .node[data-domain="boundaries"] { right: 7%; bottom: 7%; }
+        .systems-map .stage-index,
+        .systems-map .stage-note,
+        .systems-map .caption {
+          font-size: 10px;
+        }
+
+        .systems-map .boundary-label {
+          font-size: 9px;
+        }
 
         .closing {
           gap: 22px;
@@ -473,14 +484,55 @@
             </p>
           </div>
 
-          <div class="field" aria-label="Connected engineering domains">
-            <span class="node" data-domain="applications">applications</span>
-            <span class="node" data-domain="contracts">contracts</span>
-            <span class="node pulse" data-domain="delivery">delivery</span>
-            <span class="node" data-domain="runtime">runtime</span>
-            <span class="node" data-domain="boundaries">boundaries</span>
-            <p class="field-caption">relationships over inventory</p>
-          </div>
+          <svg class="systems-map" viewBox="0 0 640 420" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">Connected engineering domains</title>
+            <desc id="map-desc">A continuous path moves through applications, contracts, delivery, and runtime, crossing boundaries along the way.</desc>
+
+            <g aria-hidden="true">
+              <line class="boundary-line" x1="177" y1="36" x2="177" y2="374"/>
+              <line class="boundary-line" x1="330" y1="36" x2="330" y2="374"/>
+              <line class="boundary-line" x1="484" y1="36" x2="484" y2="374"/>
+              <text class="boundary-label" x="169" y="61" transform="rotate(-90 169 61)">BOUNDARY</text>
+              <text class="boundary-label" x="322" y="61" transform="rotate(-90 322 61)">BOUNDARY</text>
+              <text class="boundary-label" x="476" y="61" transform="rotate(-90 476 61)">BOUNDARY</text>
+
+              <path class="route-halo" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
+              <path class="route" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
+
+              <circle class="node-ring" cx="82" cy="91" r="8"/>
+              <circle class="node-core" cx="82" cy="91" r="3"/>
+              <circle class="node-ring" cx="245" cy="157" r="8"/>
+              <circle class="node-core" cx="245" cy="157" r="3"/>
+              <circle class="node-ring" cx="378" cy="239" r="8"/>
+              <circle class="node-core" cx="378" cy="239" r="3"/>
+              <circle class="node-ring" cx="554" cy="326" r="8"/>
+              <circle class="node-core" cx="554" cy="326" r="3"/>
+
+              <g class="map-stage" data-stage="applications">
+                <text class="stage-index" x="28" y="35">01</text>
+                <text class="stage-name" x="28" y="61">applications</text>
+                <text class="stage-note" x="28" y="78">INTENT / BEHAVIOR</text>
+              </g>
+              <g class="map-stage" data-stage="contracts">
+                <text class="stage-index" x="267" y="116">02</text>
+                <text class="stage-name" x="267" y="142">contracts</text>
+                <text class="stage-note" x="267" y="159">EXPECTATIONS / AGREEMENT</text>
+              </g>
+              <g class="map-stage" data-stage="delivery">
+                <text class="stage-index" x="208" y="269">03</text>
+                <text class="stage-name" x="208" y="295">delivery</text>
+                <text class="stage-note" x="208" y="312">CHANGE / REPEATABILITY</text>
+              </g>
+              <g class="map-stage" data-stage="runtime">
+                <text class="stage-index" x="465" y="352">04</text>
+                <text class="stage-name" x="465" y="378">runtime</text>
+                <text class="stage-note" x="465" y="395">SYSTEM / REALITY</text>
+              </g>
+
+              <text class="caption-mark" x="28" y="390">↳</text>
+              <text class="caption" x="47" y="390">relationships over inventory</text>
+            </g>
+          </svg>
         </section>
       </main>
 
