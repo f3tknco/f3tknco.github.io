@@ -3,25 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="f3tknco — software engineer experiencing the evolution from enterprise applications toward modern application platforms and platform engineering.">
-    <title>f3tknco — systems in motion</title>
+    <meta name="description" content="f3tknco — software engineering, systems thinking, visual thinking, and continuous learning.">
+    <title>f3tknco — systems thinking and visual thinking</title>
     <style>
       :root {
         color-scheme: light;
         --paper: #f3f0ea;
-        --paper-deep: #e9e4dc;
-        --ink: #23211f;
-        --muted: #777069;
-        --line: #d4cec4;
-        --line-strong: #b8afa4;
+        --paper-soft: #f8f5f0;
+        --ink: #24211f;
+        --muted: #746d66;
+        --line: #d5cec4;
+        --line-strong: #bbb2a7;
         --accent: #b86232;
-        --accent-soft: rgba(184, 98, 50, 0.12);
+        --accent-soft: rgba(184, 98, 50, 0.1);
         --max-width: 1120px;
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
 
       html {
         background: var(--paper);
@@ -34,16 +32,26 @@
         min-height: 100vh;
         margin: 0;
         background:
-          linear-gradient(rgba(35, 33, 31, 0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(35, 33, 31, 0.035) 1px, transparent 1px),
-          radial-gradient(circle at 78% 12%, rgba(184, 98, 50, 0.08), transparent 28rem),
+          radial-gradient(circle at 82% 13%, rgba(184, 98, 50, 0.06), transparent 25rem),
           var(--paper);
-        background-size: 48px 48px, 48px 48px, auto, auto;
       }
 
-      a {
-        color: inherit;
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.42;
+        background:
+          linear-gradient(rgba(36, 33, 31, 0.032) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(36, 33, 31, 0.032) 1px, transparent 1px);
+        background-size: 48px 48px;
+        -webkit-mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.72) 35%, transparent 76%);
+        mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.72) 35%, transparent 76%);
       }
+
+      a { color: inherit; }
 
       .shell {
         width: min(calc(100% - 48px), var(--max-width));
@@ -54,95 +62,106 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 92px;
+        min-height: 88px;
         border-bottom: 1px solid var(--line);
+      }
+
+      .identity,
+      .github-link,
+      .eyebrow,
+      .interest-index {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .identity,
+      .github-link {
+        text-decoration: none;
       }
 
       .identity {
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 0.88rem;
-        font-weight: 650;
+        font-weight: 700;
         letter-spacing: 0.02em;
-        text-decoration: none;
       }
 
       .identity-mark {
         position: relative;
-        width: 18px;
-        height: 18px;
-        border: 1px solid var(--ink);
-        transform: rotate(45deg);
+        width: 20px;
+        height: 20px;
       }
 
+      .identity-mark::before,
       .identity-mark::after {
         content: "";
         position: absolute;
-        inset: 4px;
+      }
+
+      .identity-mark::before {
+        left: 2px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border-left: 1px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+      }
+
+      .identity-mark::after {
+        left: 8px;
+        top: 8px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background: var(--accent);
+        box-shadow: 7px -7px 0 -2px var(--accent);
       }
 
       .github-link {
         display: inline-flex;
         align-items: center;
-        gap: 9px;
-        padding: 10px 14px;
-        border: 1px solid var(--line-strong);
-        border-radius: 999px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.78rem;
-        text-decoration: none;
-        transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+        gap: 8px;
+        padding: 9px 2px 8px;
+        border-bottom: 1px solid var(--line-strong);
+        font-size: 0.76rem;
+        transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
       }
 
-      .github-link:hover,
+      .identity:focus-visible,
       .github-link:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 6px;
+      }
+
+      .github-link:hover {
+        color: var(--accent);
         border-color: var(--accent);
-        background: var(--accent-soft);
         transform: translateY(-1px);
-        outline: none;
       }
 
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.7fr);
-        gap: clamp(44px, 8vw, 112px);
-        padding: clamp(84px, 12vw, 152px) 0 clamp(72px, 10vw, 124px);
-      }
-
-      .eyebrow,
-      .section-label,
-      .margin-note {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        text-transform: uppercase;
-        letter-spacing: 0.13em;
+        grid-template-columns: minmax(0, 1.14fr) minmax(320px, 0.86fr);
+        align-items: center;
+        gap: clamp(44px, 7vw, 96px);
+        padding: clamp(82px, 10vw, 126px) 0 clamp(74px, 9vw, 110px);
       }
 
       .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        margin: 0 0 24px;
+        margin: 0;
         color: var(--accent);
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         font-weight: 700;
-      }
-
-      .eyebrow::before {
-        content: "";
-        width: 28px;
-        height: 1px;
-        background: currentColor;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
 
       h1 {
-        max-width: 780px;
-        margin: 0;
-        font-size: clamp(3rem, 7vw, 6.7rem);
-        font-weight: 560;
+        max-width: 760px;
+        margin: 24px 0 30px;
+        font-size: clamp(3.3rem, 6.5vw, 6.5rem);
+        font-weight: 540;
         letter-spacing: -0.065em;
         line-height: 0.94;
       }
@@ -154,192 +173,158 @@
       }
 
       .hero-copy {
-        align-self: end;
-        padding-bottom: 6px;
-      }
-
-      .hero-copy p {
+        max-width: 620px;
         margin: 0;
         color: var(--muted);
-        font-size: clamp(1rem, 1.3vw, 1.16rem);
+        font-size: clamp(1rem, 1.2vw, 1.12rem);
         line-height: 1.72;
       }
 
-      .evolution {
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
-        padding: 28px 0 30px;
+      .hero-visual {
+        justify-self: end;
+        width: min(100%, 500px);
       }
 
-      .section-label {
-        margin: 0 0 22px;
-        color: var(--muted);
-        font-size: 0.68rem;
-        font-weight: 650;
-      }
-
-      .path {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr auto 1fr;
-        align-items: center;
-        gap: 18px;
-      }
-
-      .path-step {
-        min-height: 98px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 16px 0;
-      }
-
-      .path-index {
-        color: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.68rem;
-      }
-
-      .path-name {
-        max-width: 190px;
-        font-size: clamp(1rem, 1.4vw, 1.22rem);
-        font-weight: 630;
-        line-height: 1.28;
-      }
-
-      .path-arrow {
-        color: var(--line-strong);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 1.1rem;
-      }
-
-      .experience {
-        display: grid;
-        grid-template-columns: 0.78fr 1.22fr;
-        gap: clamp(52px, 9vw, 132px);
-        align-items: center;
-        padding: clamp(86px, 11vw, 138px) 0;
-      }
-
-      .experience-copy h2 {
-        margin: 0 0 28px;
-        font-size: clamp(2rem, 4vw, 3.6rem);
-        font-weight: 570;
-        letter-spacing: -0.045em;
-        line-height: 1.02;
-      }
-
-      .experience-copy p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.75;
-      }
-
-      .systems-map {
+      .systems-visual {
         display: block;
         width: 100%;
         height: auto;
         overflow: visible;
       }
 
-      .systems-map .boundary-line {
+      .visual-grid {
+        fill: url(#grid-pattern);
+        opacity: 0.7;
+      }
+
+      .visual-rule {
+        fill: none;
         stroke: var(--line);
         stroke-width: 1;
         stroke-dasharray: 3 7;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .boundary-label {
-        fill: var(--line-strong);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 8px;
-        letter-spacing: 1.2px;
-      }
-
-      .systems-map .route-halo {
+      .visual-path-bg {
         fill: none;
         stroke: var(--accent);
-        stroke-opacity: 0.09;
-        stroke-width: 14;
+        stroke-width: 12;
         stroke-linecap: round;
+        stroke-opacity: 0.06;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .route {
+      .visual-path,
+      .visual-branch {
         fill: none;
         stroke: var(--accent);
-        stroke-width: 2;
         stroke-linecap: round;
         stroke-linejoin: round;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .node-ring {
-        fill: var(--paper);
-        stroke: var(--accent);
+      .visual-path {
         stroke-width: 2;
+        stroke-dasharray: 2 12;
+        animation: path-drift 12s linear infinite;
+      }
+
+      .visual-branch {
+        stroke-width: 1.35;
+        stroke-dasharray: 3 8;
+        stroke-opacity: 0.55;
+      }
+
+      .visual-node {
+        fill: var(--paper);
+        stroke: var(--ink);
+        stroke-width: 1.15;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .node-core {
-        fill: var(--accent);
+      .visual-node.accent { stroke: var(--accent); }
+      .visual-core { fill: var(--accent); }
+
+      @keyframes path-drift {
+        to { stroke-dashoffset: -56; }
       }
 
-      .systems-map .stage-index {
-        fill: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 9px;
-        letter-spacing: 1px;
-      }
-
-      .systems-map .stage-name {
-        fill: var(--ink);
-        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-        font-size: 24px;
-        font-weight: 580;
-        letter-spacing: -0.7px;
-      }
-
-      .systems-map .stage-note {
-        fill: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 9px;
-        letter-spacing: 0.4px;
-      }
-
-      .systems-map .caption {
-        fill: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 9px;
-        letter-spacing: 0.8px;
-      }
-
-      .systems-map .caption-mark {
-        fill: var(--accent);
-        font-size: 13px;
-      }
-
-      .closing {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 48px;
-        padding: 40px 0 44px;
+      .interests {
         border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 34px 0 42px;
       }
 
-      .margin-note {
-        margin: 0;
+      .interests-title {
+        margin: 0 0 26px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .interest-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0;
+      }
+
+      .interest {
+        min-height: 160px;
+        padding: 24px 36px 8px 0;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .interest + .interest {
+        padding-left: 36px;
+        border-left: 1px solid var(--line);
+      }
+
+      .interest-index {
         color: var(--accent);
-        font-size: 0.67rem;
-        font-weight: 650;
-        line-height: 1.8;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
       }
 
-      .public-note {
+      .interest h2 {
+        margin: 24px 0 10px;
+        font-size: clamp(1.55rem, 2.5vw, 2.35rem);
+        font-weight: 560;
+        letter-spacing: -0.04em;
+      }
+
+      .interest p {
+        max-width: 320px;
         margin: 0;
         color: var(--muted);
-        font-size: 0.9rem;
-        line-height: 1.65;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .site-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+        padding: 34px 0 46px;
+        color: var(--muted);
+      }
+
+      .site-footer p {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-visual {
+          justify-self: center;
+          width: min(78vw, 500px);
+        }
       }
 
       @media (max-width: 760px) {
@@ -348,79 +333,49 @@
         }
 
         .site-header {
-          min-height: 76px;
-        }
-
-        .hero,
-        .experience,
-        .closing {
-          grid-template-columns: 1fr;
+          min-height: 72px;
         }
 
         .hero {
           gap: 34px;
-          padding-top: 74px;
+          padding: 66px 0 72px;
         }
 
         h1 {
-          font-size: clamp(3rem, 15vw, 5.1rem);
+          font-size: clamp(3.15rem, 15vw, 5rem);
         }
 
-        .path {
+        .hero-copy {
+          font-size: 1rem;
+        }
+
+        .interest-grid {
           grid-template-columns: 1fr;
-          gap: 0;
         }
 
-        .path-step {
-          min-height: auto;
-          flex-direction: row;
-          align-items: baseline;
-          gap: 24px;
-          padding: 15px 0;
-          border-top: 1px dashed var(--line);
+        .interest,
+        .interest + .interest {
+          min-height: 0;
+          padding: 26px 0 30px;
+          border-left: 0;
+          border-top: 1px solid var(--line);
         }
 
-        .path-arrow {
-          transform: rotate(90deg);
-          justify-self: center;
-          margin: -3px 0;
-        }
-
-        .experience {
-          gap: 44px;
-        }
-
-        .systems-map .stage-name {
-          font-size: 29px;
-        }
-
-        .systems-map .stage-index,
-        .systems-map .stage-note,
-        .systems-map .caption {
-          font-size: 10px;
-        }
-
-        .systems-map .boundary-label {
-          font-size: 9px;
-        }
-
-        .closing {
-          gap: 22px;
+        .site-footer {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 20px;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-
-        *,
-        *::before,
-        *::after {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
           animation-duration: 0.001ms !important;
           animation-iteration-count: 1 !important;
           transition-duration: 0.001ms !important;
         }
+        .visual-path { stroke-dashoffset: 0; }
       }
     </style>
   </head>
@@ -431,118 +386,84 @@
           <span class="identity-mark" aria-hidden="true"></span>
           <span>f3tknco</span>
         </a>
-        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer" aria-label="Visit f3tknco on GitHub">
-          GitHub <span aria-hidden="true">↗</span>
-        </a>
+        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer" aria-label="Visit f3tknco on GitHub">GitHub <span aria-hidden="true">↗</span></a>
       </header>
 
       <main id="top">
         <section class="hero" aria-labelledby="intro-heading">
           <div>
-            <p class="eyebrow">Systems in motion</p>
-            <h1 id="intro-heading">Hi, I'm f3tknco. <em>Experiencing</em> the evolution of software.</h1>
+            <p class="eyebrow">software engineering · systems thinking · visual thinking</p>
+            <h1 id="intro-heading">Hi, I'm f3tknco. I like making complex ideas easier to <em>understand</em>.</h1>
+            <p class="hero-copy">My background is in software engineering. I’m interested in systems thinking, visual thinking, and continuous learning.</p>
           </div>
-          <div class="hero-copy">
-            <p>
-              Software engineer experiencing the evolution from traditional enterprise
-              application development toward modern application platforms and platform
-              engineering.
-            </p>
+
+          <div class="hero-visual">
+            <svg class="systems-visual" viewBox="0 0 500 420" role="img" aria-labelledby="visual-title visual-desc">
+              <title id="visual-title">Connected ideas</title>
+              <desc id="visual-desc">A structured grid, connected nodes, and a few branching paths suggest understanding a whole by seeing how its parts relate.</desc>
+              <defs>
+                <pattern id="grid-pattern" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M32 0H0V32" fill="none" stroke="#d5cec4" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="grid-mask-gradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="white"/>
+                  <stop offset="0.58" stop-color="white" stop-opacity="0.7"/>
+                  <stop offset="1" stop-color="black" stop-opacity="0"/>
+                </linearGradient>
+                <mask id="grid-mask">
+                  <rect width="500" height="420" fill="url(#grid-mask-gradient)"/>
+                </mask>
+              </defs>
+
+              <rect class="visual-grid" x="34" y="42" width="304" height="304" mask="url(#grid-mask)"/>
+              <path class="visual-rule" d="M74 92H258V188H362"/>
+              <path class="visual-rule" d="M106 60V316M170 60V284M234 60V252"/>
+              <path class="visual-rule" d="M74 156H298M74 220H330M74 284H298"/>
+
+              <path class="visual-path-bg" d="M106 284 C164 284 174 220 234 220 C294 220 300 266 348 266 C398 266 404 326 448 326"/>
+              <path class="visual-path" d="M106 284 C164 284 174 220 234 220 C294 220 300 266 348 266 C398 266 404 326 448 326"/>
+              <path class="visual-branch" d="M348 266 C380 242 390 202 426 188 C450 179 462 156 470 128"/>
+              <path class="visual-branch" d="M404 306 C432 304 450 286 474 274"/>
+
+              <circle class="visual-node" cx="106" cy="284" r="8"/>
+              <circle class="visual-core" cx="106" cy="284" r="3"/>
+              <circle class="visual-node" cx="234" cy="220" r="8"/>
+              <circle class="visual-core" cx="234" cy="220" r="3"/>
+              <circle class="visual-node accent" cx="348" cy="266" r="8"/>
+              <circle class="visual-core" cx="348" cy="266" r="3"/>
+              <circle class="visual-node accent" cx="448" cy="326" r="8"/>
+              <circle class="visual-core" cx="448" cy="326" r="3"/>
+              <circle class="visual-core" cx="470" cy="128" r="4"/>
+              <circle class="visual-core" cx="474" cy="274" r="3"/>
+            </svg>
           </div>
         </section>
 
-        <section class="evolution" aria-labelledby="evolution-heading">
-          <p class="section-label" id="evolution-heading">A path, not a checklist</p>
-          <div class="path" aria-label="Evolution from traditional applications to platform engineering">
-            <div class="path-step">
-              <span class="path-index">01</span>
-              <span class="path-name">traditional applications</span>
-            </div>
-            <span class="path-arrow" aria-hidden="true">→</span>
-            <div class="path-step">
-              <span class="path-index">02</span>
-              <span class="path-name">application platforms</span>
-            </div>
-            <span class="path-arrow" aria-hidden="true">→</span>
-            <div class="path-step">
-              <span class="path-index">03</span>
-              <span class="path-name">platform engineering</span>
-            </div>
+        <section class="interests" aria-labelledby="interests-heading">
+          <h2 class="interests-title" id="interests-heading">Interests</h2>
+          <div class="interest-grid">
+            <article class="interest">
+              <span class="interest-index">01</span>
+              <h2>Systems thinking</h2>
+              <p>How parts interact and shape the whole.</p>
+            </article>
+            <article class="interest">
+              <span class="interest-index">02</span>
+              <h2>Visual thinking</h2>
+              <p>Using diagrams and visual structure to make ideas clearer.</p>
+            </article>
+            <article class="interest">
+              <span class="interest-index">03</span>
+              <h2>Continuous learning</h2>
+              <p>Exploring, testing, and refining as understanding grows.</p>
+            </article>
           </div>
-        </section>
-
-        <section class="experience" aria-labelledby="experience-heading">
-          <div class="experience-copy">
-            <p class="section-label">What I keep running into</p>
-            <h2 id="experience-heading">The interesting part is usually between things.</h2>
-            <p>
-              Along the way, I've been working with frontend/backend separation, API
-              contracts, automated testing, CI/CD, GitOps, containers, Kubernetes and
-              security. What keeps pulling these topics together for me is the same
-              question: where should a responsibility live, and what boundary makes the
-              whole system easier to understand?
-            </p>
-          </div>
-
-          <svg class="systems-map" viewBox="0 0 640 420" role="img" aria-labelledby="map-title map-desc">
-            <title id="map-title">Connected engineering domains</title>
-            <desc id="map-desc">A continuous path moves through applications, contracts, delivery, and runtime, crossing boundaries along the way.</desc>
-
-            <g aria-hidden="true">
-              <line class="boundary-line" x1="177" y1="36" x2="177" y2="374"/>
-              <line class="boundary-line" x1="330" y1="36" x2="330" y2="374"/>
-              <line class="boundary-line" x1="484" y1="36" x2="484" y2="374"/>
-              <text class="boundary-label" x="169" y="61" transform="rotate(-90 169 61)">BOUNDARY</text>
-              <text class="boundary-label" x="322" y="61" transform="rotate(-90 322 61)">BOUNDARY</text>
-              <text class="boundary-label" x="476" y="61" transform="rotate(-90 476 61)">BOUNDARY</text>
-
-              <path class="route-halo" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
-              <path class="route" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
-
-              <circle class="node-ring" cx="82" cy="91" r="8"/>
-              <circle class="node-core" cx="82" cy="91" r="3"/>
-              <circle class="node-ring" cx="245" cy="157" r="8"/>
-              <circle class="node-core" cx="245" cy="157" r="3"/>
-              <circle class="node-ring" cx="378" cy="239" r="8"/>
-              <circle class="node-core" cx="378" cy="239" r="3"/>
-              <circle class="node-ring" cx="554" cy="326" r="8"/>
-              <circle class="node-core" cx="554" cy="326" r="3"/>
-
-              <g class="map-stage" data-stage="applications">
-                <text class="stage-index" x="28" y="35">01</text>
-                <text class="stage-name" x="28" y="61">applications</text>
-                <text class="stage-note" x="28" y="78">INTENT / BEHAVIOR</text>
-              </g>
-              <g class="map-stage" data-stage="contracts">
-                <text class="stage-index" x="267" y="116">02</text>
-                <text class="stage-name" x="267" y="142">contracts</text>
-                <text class="stage-note" x="267" y="159">EXPECTATIONS / AGREEMENT</text>
-              </g>
-              <g class="map-stage" data-stage="delivery">
-                <text class="stage-index" x="340" y="269">03</text>
-                <text class="stage-name" x="340" y="295">delivery</text>
-                <text class="stage-note" x="340" y="312">CHANGE / REPEATABILITY</text>
-              </g>
-              <g class="map-stage" data-stage="runtime">
-                <text class="stage-index" x="465" y="352">04</text>
-                <text class="stage-name" x="465" y="378">runtime</text>
-                <text class="stage-note" x="465" y="395">SYSTEM / REALITY</text>
-              </g>
-
-              <text class="caption-mark" x="28" y="390">↳</text>
-              <text class="caption" x="47" y="390">relationships over inventory</text>
-            </g>
-          </svg>
         </section>
       </main>
 
-      <footer class="closing">
-        <p class="margin-note">principles → boundaries → systems → implementation</p>
-        <p class="public-note">
-          Most of this experience comes from real internal systems rather than public
-          projects, so this site is less a portfolio and more a small place for things
-          I can make public.
-        </p>
+      <footer class="site-footer">
+        <p>A small place for things I can make public.</p>
+        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer">github.com/f3tknco <span aria-hidden="true">↗</span></a>
       </footer>
     </div>
   </body>
