@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="f3tknco — finding structure in complexity and seeing what can grow from it.">
-    <title>f3tknco — structured core, living edge</title>
+    <meta name="description" content="f3tknco — software engineering, systems thinking, visual thinking, and continuous learning.">
+    <title>f3tknco — systems thinking and visual thinking</title>
     <style>
       :root {
         color-scheme: light;
@@ -12,12 +12,10 @@
         --paper-soft: #f8f5f0;
         --ink: #24211f;
         --muted: #746d66;
-        --faint: #aaa198;
         --line: #d5cec4;
         --line-strong: #bbb2a7;
         --accent: #b86232;
-        --accent-soft: rgba(184, 98, 50, 0.11);
-        --accent-faint: rgba(184, 98, 50, 0.055);
+        --accent-soft: rgba(184, 98, 50, 0.1);
         --max-width: 1120px;
       }
 
@@ -33,9 +31,8 @@
       body {
         min-height: 100vh;
         margin: 0;
-        overflow-x: hidden;
         background:
-          radial-gradient(circle at 84% 10%, var(--accent-faint), transparent 24rem),
+          radial-gradient(circle at 82% 13%, rgba(184, 98, 50, 0.06), transparent 25rem),
           var(--paper);
       }
 
@@ -45,13 +42,13 @@
         inset: 0;
         z-index: -1;
         pointer-events: none;
-        opacity: 0.5;
+        opacity: 0.42;
         background:
-          linear-gradient(rgba(36, 33, 31, 0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(36, 33, 31, 0.035) 1px, transparent 1px);
+          linear-gradient(rgba(36, 33, 31, 0.032) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(36, 33, 31, 0.032) 1px, transparent 1px);
         background-size: 48px 48px;
-        -webkit-mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.9) 24%, rgba(0, 0, 0, 0.28) 52%, transparent 76%);
-        mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.9) 24%, rgba(0, 0, 0, 0.28) 52%, transparent 76%);
+        -webkit-mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.72) 35%, transparent 76%);
+        mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.72) 35%, transparent 76%);
       }
 
       a { color: inherit; }
@@ -65,17 +62,14 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 90px;
+        min-height: 88px;
         border-bottom: 1px solid var(--line);
       }
 
       .identity,
       .github-link,
       .eyebrow,
-      .section-label,
-      .lens-index,
-      .principle-label,
-      .field-note {
+      .interest-index {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
 
@@ -148,41 +142,25 @@
 
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.16fr) minmax(340px, 0.84fr);
+        grid-template-columns: minmax(0, 1.14fr) minmax(320px, 0.86fr);
         align-items: center;
         gap: clamp(44px, 7vw, 96px);
-        min-height: min(780px, calc(100vh - 90px));
-        padding: clamp(78px, 10vw, 126px) 0 clamp(86px, 11vw, 138px);
-      }
-
-      .eyebrow,
-      .section-label,
-      .principle-label {
-        margin: 0;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 0.14em;
-        font-size: 0.68rem;
-        font-weight: 700;
+        padding: clamp(82px, 10vw, 126px) 0 clamp(74px, 9vw, 110px);
       }
 
       .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .eyebrow::before {
-        content: "";
-        width: 28px;
-        height: 1px;
-        background: currentColor;
+        margin: 0;
+        color: var(--accent);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
 
       h1 {
         max-width: 760px;
-        margin: 24px 0 32px;
-        font-size: clamp(3.4rem, 6.6vw, 6.6rem);
+        margin: 24px 0 30px;
+        font-size: clamp(3.3rem, 6.5vw, 6.5rem);
         font-weight: 540;
         letter-spacing: -0.065em;
         line-height: 0.94;
@@ -195,323 +173,157 @@
       }
 
       .hero-copy {
-        max-width: 630px;
+        max-width: 620px;
         margin: 0;
         color: var(--muted);
-        font-size: clamp(1rem, 1.3vw, 1.14rem);
-        line-height: 1.75;
+        font-size: clamp(1rem, 1.2vw, 1.12rem);
+        line-height: 1.72;
       }
 
       .hero-visual {
-        position: relative;
         justify-self: end;
-        width: min(100%, 510px);
+        width: min(100%, 500px);
       }
 
-      .hero-visual::before {
-        content: "";
-        position: absolute;
-        inset: 22% 2% 8% 28%;
-        z-index: -1;
-        border-radius: 50%;
-        background: radial-gradient(circle, var(--accent-soft), transparent 66%);
-        filter: blur(18px);
-      }
-
-      .structured-field {
+      .systems-visual {
         display: block;
         width: 100%;
         height: auto;
         overflow: visible;
       }
 
-      .structure-grid {
-        fill: url(#field-grid-pattern);
-        opacity: 0.72;
+      .visual-grid {
+        fill: url(#grid-pattern);
+        opacity: 0.7;
       }
 
-      .field-rule {
+      .visual-rule {
         fill: none;
-        stroke: var(--line-strong);
+        stroke: var(--line);
         stroke-width: 1;
+        stroke-dasharray: 3 7;
         vector-effect: non-scaling-stroke;
       }
 
-      .field-rule.faint {
-        stroke: var(--line);
-        stroke-dasharray: 3 7;
-      }
-
-      .signal-bed {
+      .visual-path-bg {
         fill: none;
         stroke: var(--accent);
         stroke-width: 12;
         stroke-linecap: round;
-        stroke-opacity: 0.065;
+        stroke-opacity: 0.06;
         vector-effect: non-scaling-stroke;
       }
 
-      .living-signal {
+      .visual-path,
+      .visual-branch {
         fill: none;
         stroke: var(--accent);
-        stroke-width: 2.1;
         stroke-linecap: round;
         stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .visual-path {
+        stroke-width: 2;
         stroke-dasharray: 2 12;
-        vector-effect: non-scaling-stroke;
-        animation: signal-drift 11s linear infinite;
+        animation: path-drift 12s linear infinite;
       }
 
-      .possibility-branch {
-        fill: none;
-        stroke: var(--accent);
-        stroke-width: 1.4;
-        stroke-linecap: round;
+      .visual-branch {
+        stroke-width: 1.35;
         stroke-dasharray: 3 8;
-        stroke-opacity: 0.58;
-        vector-effect: non-scaling-stroke;
+        stroke-opacity: 0.55;
       }
 
-      .field-node {
+      .visual-node {
         fill: var(--paper);
         stroke: var(--ink);
-        stroke-width: 1.2;
+        stroke-width: 1.15;
         vector-effect: non-scaling-stroke;
       }
 
-      .field-node.signal {
-        stroke: var(--accent);
-      }
+      .visual-node.accent { stroke: var(--accent); }
+      .visual-core { fill: var(--accent); }
 
-      .field-core {
-        fill: var(--accent);
-      }
-
-      .field-note {
-        fill: var(--muted);
-        font-size: 9px;
-        letter-spacing: 0.9px;
-      }
-
-      .field-note.accent {
-        fill: var(--accent);
-      }
-
-      @keyframes signal-drift {
+      @keyframes path-drift {
         to { stroke-dashoffset: -56; }
       }
 
-      .lenses {
-        position: relative;
-        padding: clamp(78px, 10vw, 124px) 0 clamp(92px, 12vw, 142px);
+      .interests {
         border-top: 1px solid var(--line);
         border-bottom: 1px solid var(--line);
+        padding: 34px 0 42px;
       }
 
-      .lenses::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        bottom: 5%;
-        width: min(34vw, 390px);
-        aspect-ratio: 1;
-        border: 1px solid var(--line);
-        border-radius: 50%;
-        opacity: 0.36;
-        clip-path: inset(48% 0 0 0);
-        pointer-events: none;
-      }
-
-      .lenses-head {
-        display: grid;
-        grid-template-columns: 0.65fr 1.35fr;
-        gap: 48px;
-        align-items: end;
-      }
-
-      .lenses-intro {
-        max-width: 600px;
-        margin: 0;
+      .interests-title {
+        margin: 0 0 26px;
         color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.7;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
 
-      .lens-field {
-        position: relative;
+      .interest-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-top: 46px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0;
       }
 
-      .lens-field::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        background: linear-gradient(to bottom, var(--line-strong), var(--line), transparent 96%);
-      }
-
-      .lens {
-        position: relative;
-        min-height: 210px;
-        padding: 28px 48px 42px 0;
-        border-top: 1px solid var(--line);
-      }
-
-      .lens:nth-child(even) {
-        padding-left: 56px;
-        padding-right: 0;
-      }
-
-      .lens:nth-child(3) {
-        padding-top: 44px;
-      }
-
-      .lens:nth-child(4) {
-        padding-top: 74px;
-      }
-
-      .lens:nth-child(4)::before {
-        content: "";
-        position: absolute;
-        left: 30px;
-        top: 25px;
-        width: 1px;
-        height: 40px;
-        background: var(--accent);
-        transform: rotate(38deg);
-        transform-origin: bottom;
-        opacity: 0.62;
-      }
-
-      .lens:nth-child(4)::after {
-        content: "";
-        position: absolute;
-        left: 45px;
-        top: 22px;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 0 7px var(--accent-soft);
-      }
-
-      .lens-index {
-        color: var(--accent);
-        font-size: 0.67rem;
-        letter-spacing: 0.08em;
-      }
-
-      .lens h2 {
-        margin: 30px 0 12px;
-        font-size: clamp(2rem, 3.5vw, 3.55rem);
-        font-weight: 550;
-        letter-spacing: -0.05em;
-        line-height: 1;
-      }
-
-      .lens p {
-        max-width: 390px;
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.65;
-      }
-
-      .principle {
-        display: grid;
-        grid-template-columns: 0.58fr 1.42fr;
-        align-items: end;
-        gap: 48px;
-        margin-top: 54px;
-        padding-top: 24px;
+      .interest {
+        min-height: 160px;
+        padding: 24px 36px 8px 0;
         border-top: 1px solid var(--line-strong);
       }
 
-      .principle strong {
-        font-size: clamp(2rem, 4.2vw, 4.6rem);
-        font-weight: 520;
-        letter-spacing: -0.052em;
-        line-height: 0.98;
+      .interest + .interest {
+        padding-left: 36px;
+        border-left: 1px solid var(--line);
       }
 
-      .between {
-        display: grid;
-        grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.65fr);
-        gap: clamp(58px, 10vw, 142px);
-        padding: clamp(96px, 13vw, 160px) 0;
-      }
-
-      .between h2 {
-        margin: 0;
-        max-width: 690px;
-        font-size: clamp(2.7rem, 5.7vw, 5.4rem);
-        font-weight: 540;
-        letter-spacing: -0.058em;
-        line-height: 0.98;
-      }
-
-      .between-copy {
-        align-self: end;
-      }
-
-      .between-copy::before {
-        content: "↳";
-        display: block;
-        margin-bottom: 18px;
+      .interest-index {
         color: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 1rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
       }
 
-      .between-copy p {
+      .interest h2 {
+        margin: 24px 0 10px;
+        font-size: clamp(1.55rem, 2.5vw, 2.35rem);
+        font-weight: 560;
+        letter-spacing: -0.04em;
+      }
+
+      .interest p {
+        max-width: 320px;
         margin: 0;
         color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.78;
+        font-size: 0.95rem;
+        line-height: 1.6;
       }
 
-      .public-edge {
-        display: grid;
-        grid-template-columns: 0.58fr 1.42fr;
-        gap: 48px;
-        align-items: start;
-        padding: 38px 0 48px;
-        border-top: 1px solid var(--line);
+      .site-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+        padding: 34px 0 46px;
         color: var(--muted);
       }
 
-      .public-edge p { margin: 0; }
-
-      .public-edge-copy {
-        display: flex;
-        justify-content: space-between;
-        gap: 36px;
-      }
-
-      .public-edge-copy > p {
-        max-width: 540px;
-        line-height: 1.65;
+      .site-footer p {
+        margin: 0;
+        line-height: 1.6;
       }
 
       @media (max-width: 900px) {
         .hero {
           grid-template-columns: 1fr;
-          min-height: auto;
         }
 
         .hero-visual {
           justify-self: center;
-          width: min(82vw, 510px);
-          margin-top: 8px;
-        }
-
-        .lenses-head,
-        .principle,
-        .public-edge {
-          grid-template-columns: 1fr;
+          width: min(78vw, 500px);
         }
       }
 
@@ -521,67 +333,38 @@
         }
 
         .site-header {
-          min-height: 74px;
+          min-height: 72px;
         }
 
         .hero {
-          gap: 42px;
-          padding-top: 76px;
+          gap: 34px;
+          padding: 66px 0 72px;
         }
 
         h1 {
-          font-size: clamp(3.3rem, 15.5vw, 5.3rem);
+          font-size: clamp(3.15rem, 15vw, 5rem);
         }
 
         .hero-copy {
           font-size: 1rem;
         }
 
-        .lens-field,
-        .between {
+        .interest-grid {
           grid-template-columns: 1fr;
         }
 
-        .lens-field::before {
-          left: 11px;
-          background: linear-gradient(to bottom, var(--line-strong), transparent 100%);
-        }
-
-        .lens,
-        .lens:nth-child(even),
-        .lens:nth-child(3),
-        .lens:nth-child(4) {
+        .interest,
+        .interest + .interest {
           min-height: 0;
-          padding: 28px 0 34px 36px;
+          padding: 26px 0 30px;
+          border-left: 0;
+          border-top: 1px solid var(--line);
         }
 
-        .lens:nth-child(4)::before {
-          left: 4px;
-          top: 11px;
-          height: 22px;
-        }
-
-        .lens:nth-child(4)::after {
-          left: 13px;
-          top: 7px;
-        }
-
-        .lens h2 {
-          margin-top: 18px;
-        }
-
-        .principle {
-          gap: 18px;
-          margin-top: 34px;
-        }
-
-        .between {
-          gap: 38px;
-        }
-
-        .public-edge-copy {
+        .site-footer {
+          align-items: flex-start;
           flex-direction: column;
-          gap: 22px;
+          gap: 20px;
         }
       }
 
@@ -592,7 +375,7 @@
           animation-iteration-count: 1 !important;
           transition-duration: 0.001ms !important;
         }
-        .living-signal { stroke-dashoffset: 0; }
+        .visual-path { stroke-dashoffset: 0; }
       }
     </style>
   </head>
@@ -608,108 +391,79 @@
 
       <main id="top">
         <section class="hero" aria-labelledby="intro-heading">
-          <div class="hero-copy-block">
-            <p class="eyebrow">structured core / living edge</p>
-            <h1 id="intro-heading">I like finding structure in complexity — then seeing what can <em>grow</em> from it.</h1>
-            <p class="hero-copy">My background is in software engineering, but I tend to be drawn to relationships, boundaries, and the ways ideas and systems become coherent enough to evolve.</p>
+          <div>
+            <p class="eyebrow">software engineering · systems thinking · visual thinking</p>
+            <h1 id="intro-heading">Hi, I'm f3tknco. I like making complex ideas easier to <em>understand</em>.</h1>
+            <p class="hero-copy">My background is in software engineering. I’m interested in systems thinking, visual thinking, and continuous learning.</p>
           </div>
 
           <div class="hero-visual">
-            <svg class="structured-field" viewBox="0 0 520 520" role="img" aria-labelledby="field-title field-desc">
-              <title id="field-title">Structure opening into possibility</title>
-              <desc id="field-desc">A precise grid and set of aligned nodes gradually give way to a copper signal that branches into new possibilities.</desc>
+            <svg class="systems-visual" viewBox="0 0 500 420" role="img" aria-labelledby="visual-title visual-desc">
+              <title id="visual-title">Connected ideas</title>
+              <desc id="visual-desc">A structured grid, connected nodes, and a few branching paths suggest understanding a whole by seeing how its parts relate.</desc>
               <defs>
-                <pattern id="field-grid-pattern" width="32" height="32" patternUnits="userSpaceOnUse">
+                <pattern id="grid-pattern" width="32" height="32" patternUnits="userSpaceOnUse">
                   <path d="M32 0H0V32" fill="none" stroke="#d5cec4" stroke-width="1"/>
                 </pattern>
-                <linearGradient id="grid-opacity" x1="0" y1="0" x2="1" y2="1">
+                <linearGradient id="grid-mask-gradient" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0" stop-color="white"/>
-                  <stop offset="0.56" stop-color="white" stop-opacity="0.72"/>
+                  <stop offset="0.58" stop-color="white" stop-opacity="0.7"/>
                   <stop offset="1" stop-color="black" stop-opacity="0"/>
                 </linearGradient>
-                <mask id="grid-fade">
-                  <rect width="520" height="520" fill="url(#grid-opacity)"/>
+                <mask id="grid-mask">
+                  <rect width="500" height="420" fill="url(#grid-mask-gradient)"/>
                 </mask>
               </defs>
 
-              <rect class="structure-grid" x="36" y="48" width="340" height="340" mask="url(#grid-fade)"/>
-              <path class="field-rule" d="M68 96H292V208H404"/>
-              <path class="field-rule faint" d="M100 64V336M164 64V304M228 64V272"/>
-              <path class="field-rule faint" d="M68 160H324M68 224H356M68 288H324"/>
+              <rect class="visual-grid" x="34" y="42" width="304" height="304" mask="url(#grid-mask)"/>
+              <path class="visual-rule" d="M74 92H258V188H362"/>
+              <path class="visual-rule" d="M106 60V316M170 60V284M234 60V252"/>
+              <path class="visual-rule" d="M74 156H298M74 220H330M74 284H298"/>
 
-              <path class="signal-bed" d="M100 288 C166 288 171 224 228 224 C285 224 302 272 348 272 C401 272 393 348 448 348"/>
-              <path class="living-signal" d="M100 288 C166 288 171 224 228 224 C285 224 302 272 348 272 C401 272 393 348 448 348"/>
-              <path class="possibility-branch" d="M348 272 C379 248 391 205 430 190 C455 181 468 159 476 132"/>
-              <path class="possibility-branch" d="M404 320 C438 318 455 296 482 284"/>
+              <path class="visual-path-bg" d="M106 284 C164 284 174 220 234 220 C294 220 300 266 348 266 C398 266 404 326 448 326"/>
+              <path class="visual-path" d="M106 284 C164 284 174 220 234 220 C294 220 300 266 348 266 C398 266 404 326 448 326"/>
+              <path class="visual-branch" d="M348 266 C380 242 390 202 426 188 C450 179 462 156 470 128"/>
+              <path class="visual-branch" d="M404 306 C432 304 450 286 474 274"/>
 
-              <circle class="field-node" cx="100" cy="288" r="8"/>
-              <circle class="field-core" cx="100" cy="288" r="3"/>
-              <circle class="field-node" cx="228" cy="224" r="8"/>
-              <circle class="field-core" cx="228" cy="224" r="3"/>
-              <circle class="field-node signal" cx="348" cy="272" r="8"/>
-              <circle class="field-core" cx="348" cy="272" r="3"/>
-              <circle class="field-node signal" cx="448" cy="348" r="8"/>
-              <circle class="field-core" cx="448" cy="348" r="3"/>
-              <circle class="field-core" cx="476" cy="132" r="4"/>
-              <circle class="field-core" cx="482" cy="284" r="3"/>
-
-              <text class="field-note" x="68" y="82">STRUCTURE</text>
-              <text class="field-note" x="260" y="212">COHERENCE</text>
-              <text class="field-note accent" x="397" y="114">POSSIBILITY</text>
-              <text class="field-note accent" x="386" y="380">LIVING EDGE</text>
+              <circle class="visual-node" cx="106" cy="284" r="8"/>
+              <circle class="visual-core" cx="106" cy="284" r="3"/>
+              <circle class="visual-node" cx="234" cy="220" r="8"/>
+              <circle class="visual-core" cx="234" cy="220" r="3"/>
+              <circle class="visual-node accent" cx="348" cy="266" r="8"/>
+              <circle class="visual-core" cx="348" cy="266" r="3"/>
+              <circle class="visual-node accent" cx="448" cy="326" r="8"/>
+              <circle class="visual-core" cx="448" cy="326" r="3"/>
+              <circle class="visual-core" cx="470" cy="128" r="4"/>
+              <circle class="visual-core" cx="474" cy="274" r="3"/>
             </svg>
           </div>
         </section>
 
-        <section class="lenses" aria-labelledby="lenses-heading">
-          <div class="lenses-head">
-            <p class="section-label" id="lenses-heading">ways of seeing / not a process</p>
-            <p class="lenses-intro">The same questions keep appearing in different forms. They are less a method than a set of lenses I tend to return to.</p>
-          </div>
-
-          <div class="lens-field">
-            <article class="lens" data-lens="structure">
-              <span class="lens-index">01 / CORE</span>
-              <h2>Structure</h2>
-              <p>What is actually here?</p>
+        <section class="interests" aria-labelledby="interests-heading">
+          <h2 class="interests-title" id="interests-heading">Interests</h2>
+          <div class="interest-grid">
+            <article class="interest">
+              <span class="interest-index">01</span>
+              <h2>Systems thinking</h2>
+              <p>How parts interact and shape the whole.</p>
             </article>
-            <article class="lens" data-lens="relationships">
-              <span class="lens-index">02 / CONNECTION</span>
-              <h2>Relationships</h2>
-              <p>How do the pieces affect one another?</p>
+            <article class="interest">
+              <span class="interest-index">02</span>
+              <h2>Visual thinking</h2>
+              <p>Using diagrams and visual structure to make ideas clearer.</p>
             </article>
-            <article class="lens" data-lens="boundaries">
-              <span class="lens-index">03 / RESPONSIBILITY</span>
-              <h2>Boundaries</h2>
-              <p>Where should responsibility live?</p>
+            <article class="interest">
+              <span class="interest-index">03</span>
+              <h2>Continuous learning</h2>
+              <p>Exploring, testing, and refining as understanding grows.</p>
             </article>
-            <article class="lens" data-lens="emergence">
-              <span class="lens-index">04 / POSSIBILITY</span>
-              <h2>Emergence</h2>
-              <p>What becomes possible once the whole is coherent?</p>
-            </article>
-          </div>
-
-          <div class="principle">
-            <span class="principle-label">a recurring preference</span>
-            <strong>relationships over inventory</strong>
-          </div>
-        </section>
-
-        <section class="between" aria-labelledby="between-heading">
-          <h2 id="between-heading">The interesting part is usually between things.</h2>
-          <div class="between-copy">
-            <p>I’m usually less interested in collecting more pieces than in understanding how they fit together. Once the relationships make sense, the whole becomes easier to explain, change, and sometimes turn into something unexpected.</p>
           </div>
         </section>
       </main>
 
-      <footer class="public-edge">
-        <p class="section-label">public edge</p>
-        <div class="public-edge-copy">
-          <p>This is a small public edge of a much larger set of things I explore, build, and think about.</p>
-          <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer">github.com/f3tknco <span aria-hidden="true">↗</span></a>
-        </div>
+      <footer class="site-footer">
+        <p>A small place for things I can make public.</p>
+        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer">github.com/f3tknco <span aria-hidden="true">↗</span></a>
       </footer>
     </div>
   </body>
