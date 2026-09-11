@@ -3,25 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="f3tknco — software engineer experiencing the evolution from enterprise applications toward modern application platforms and platform engineering.">
-    <title>f3tknco — systems in motion</title>
+    <meta name="description" content="f3tknco — finding structure in complexity and seeing what can grow from it.">
+    <title>f3tknco — structured core, living edge</title>
     <style>
       :root {
         color-scheme: light;
         --paper: #f3f0ea;
-        --paper-deep: #e9e4dc;
-        --ink: #23211f;
-        --muted: #777069;
-        --line: #d4cec4;
-        --line-strong: #b8afa4;
+        --paper-soft: #f8f5f0;
+        --ink: #24211f;
+        --muted: #746d66;
+        --faint: #aaa198;
+        --line: #d5cec4;
+        --line-strong: #bbb2a7;
         --accent: #b86232;
-        --accent-soft: rgba(184, 98, 50, 0.12);
+        --accent-soft: rgba(184, 98, 50, 0.11);
+        --accent-faint: rgba(184, 98, 50, 0.055);
         --max-width: 1120px;
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
 
       html {
         background: var(--paper);
@@ -33,17 +33,28 @@
       body {
         min-height: 100vh;
         margin: 0;
+        overflow-x: hidden;
         background:
-          linear-gradient(rgba(35, 33, 31, 0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(35, 33, 31, 0.035) 1px, transparent 1px),
-          radial-gradient(circle at 78% 12%, rgba(184, 98, 50, 0.08), transparent 28rem),
+          radial-gradient(circle at 84% 10%, var(--accent-faint), transparent 24rem),
           var(--paper);
-        background-size: 48px 48px, 48px 48px, auto, auto;
       }
 
-      a {
-        color: inherit;
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.5;
+        background:
+          linear-gradient(rgba(36, 33, 31, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(36, 33, 31, 0.035) 1px, transparent 1px);
+        background-size: 48px 48px;
+        -webkit-mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.9) 24%, rgba(0, 0, 0, 0.28) 52%, transparent 76%);
+        mask-image: linear-gradient(135deg, #000 0%, rgba(0, 0, 0, 0.9) 24%, rgba(0, 0, 0, 0.28) 52%, transparent 76%);
       }
+
+      a { color: inherit; }
 
       .shell {
         width: min(calc(100% - 48px), var(--max-width));
@@ -54,81 +65,111 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 92px;
+        min-height: 90px;
         border-bottom: 1px solid var(--line);
+      }
+
+      .identity,
+      .github-link,
+      .eyebrow,
+      .section-label,
+      .lens-index,
+      .principle-label,
+      .field-note {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .identity,
+      .github-link {
+        text-decoration: none;
       }
 
       .identity {
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 0.88rem;
-        font-weight: 650;
+        font-weight: 700;
         letter-spacing: 0.02em;
-        text-decoration: none;
       }
 
       .identity-mark {
         position: relative;
-        width: 18px;
-        height: 18px;
-        border: 1px solid var(--ink);
-        transform: rotate(45deg);
+        width: 20px;
+        height: 20px;
       }
 
+      .identity-mark::before,
       .identity-mark::after {
         content: "";
         position: absolute;
-        inset: 4px;
+      }
+
+      .identity-mark::before {
+        left: 2px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border-left: 1px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+      }
+
+      .identity-mark::after {
+        left: 8px;
+        top: 8px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background: var(--accent);
+        box-shadow: 7px -7px 0 -2px var(--accent);
       }
 
       .github-link {
         display: inline-flex;
         align-items: center;
-        gap: 9px;
-        padding: 10px 14px;
-        border: 1px solid var(--line-strong);
-        border-radius: 999px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.78rem;
-        text-decoration: none;
-        transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+        gap: 8px;
+        padding: 9px 2px 8px;
+        border-bottom: 1px solid var(--line-strong);
+        font-size: 0.76rem;
+        transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
       }
 
-      .github-link:hover,
+      .identity:focus-visible,
       .github-link:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 6px;
+      }
+
+      .github-link:hover {
+        color: var(--accent);
         border-color: var(--accent);
-        background: var(--accent-soft);
         transform: translateY(-1px);
-        outline: none;
       }
 
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.7fr);
-        gap: clamp(44px, 8vw, 112px);
-        padding: clamp(84px, 12vw, 152px) 0 clamp(72px, 10vw, 124px);
+        grid-template-columns: minmax(0, 1.16fr) minmax(340px, 0.84fr);
+        align-items: center;
+        gap: clamp(44px, 7vw, 96px);
+        min-height: min(780px, calc(100vh - 90px));
+        padding: clamp(78px, 10vw, 126px) 0 clamp(86px, 11vw, 138px);
       }
 
       .eyebrow,
       .section-label,
-      .margin-note {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      .principle-label {
+        margin: 0;
+        color: var(--accent);
         text-transform: uppercase;
-        letter-spacing: 0.13em;
+        letter-spacing: 0.14em;
+        font-size: 0.68rem;
+        font-weight: 700;
       }
 
       .eyebrow {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        margin: 0 0 24px;
-        color: var(--accent);
-        font-size: 0.72rem;
-        font-weight: 700;
       }
 
       .eyebrow::before {
@@ -139,10 +180,10 @@
       }
 
       h1 {
-        max-width: 780px;
-        margin: 0;
-        font-size: clamp(3rem, 7vw, 6.7rem);
-        font-weight: 560;
+        max-width: 760px;
+        margin: 24px 0 32px;
+        font-size: clamp(3.4rem, 6.6vw, 6.6rem);
+        font-weight: 540;
         letter-spacing: -0.065em;
         line-height: 0.94;
       }
@@ -154,192 +195,324 @@
       }
 
       .hero-copy {
-        align-self: end;
-        padding-bottom: 6px;
-      }
-
-      .hero-copy p {
+        max-width: 630px;
         margin: 0;
         color: var(--muted);
-        font-size: clamp(1rem, 1.3vw, 1.16rem);
-        line-height: 1.72;
-      }
-
-      .evolution {
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
-        padding: 28px 0 30px;
-      }
-
-      .section-label {
-        margin: 0 0 22px;
-        color: var(--muted);
-        font-size: 0.68rem;
-        font-weight: 650;
-      }
-
-      .path {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr auto 1fr;
-        align-items: center;
-        gap: 18px;
-      }
-
-      .path-step {
-        min-height: 98px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 16px 0;
-      }
-
-      .path-index {
-        color: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.68rem;
-      }
-
-      .path-name {
-        max-width: 190px;
-        font-size: clamp(1rem, 1.4vw, 1.22rem);
-        font-weight: 630;
-        line-height: 1.28;
-      }
-
-      .path-arrow {
-        color: var(--line-strong);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 1.1rem;
-      }
-
-      .experience {
-        display: grid;
-        grid-template-columns: 0.78fr 1.22fr;
-        gap: clamp(52px, 9vw, 132px);
-        align-items: center;
-        padding: clamp(86px, 11vw, 138px) 0;
-      }
-
-      .experience-copy h2 {
-        margin: 0 0 28px;
-        font-size: clamp(2rem, 4vw, 3.6rem);
-        font-weight: 570;
-        letter-spacing: -0.045em;
-        line-height: 1.02;
-      }
-
-      .experience-copy p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 1rem;
+        font-size: clamp(1rem, 1.3vw, 1.14rem);
         line-height: 1.75;
       }
 
-      .systems-map {
+      .hero-visual {
+        position: relative;
+        justify-self: end;
+        width: min(100%, 510px);
+      }
+
+      .hero-visual::before {
+        content: "";
+        position: absolute;
+        inset: 22% 2% 8% 28%;
+        z-index: -1;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--accent-soft), transparent 66%);
+        filter: blur(18px);
+      }
+
+      .structured-field {
         display: block;
         width: 100%;
         height: auto;
         overflow: visible;
       }
 
-      .systems-map .boundary-line {
-        stroke: var(--line);
+      .structure-grid {
+        fill: url(#field-grid-pattern);
+        opacity: 0.72;
+      }
+
+      .field-rule {
+        fill: none;
+        stroke: var(--line-strong);
         stroke-width: 1;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .field-rule.faint {
+        stroke: var(--line);
         stroke-dasharray: 3 7;
-        vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .boundary-label {
-        fill: var(--line-strong);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 8px;
-        letter-spacing: 1.2px;
-      }
-
-      .systems-map .route-halo {
+      .signal-bed {
         fill: none;
         stroke: var(--accent);
-        stroke-opacity: 0.09;
-        stroke-width: 14;
+        stroke-width: 12;
         stroke-linecap: round;
+        stroke-opacity: 0.065;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .route {
+      .living-signal {
         fill: none;
         stroke: var(--accent);
-        stroke-width: 2;
+        stroke-width: 2.1;
         stroke-linecap: round;
         stroke-linejoin: round;
+        stroke-dasharray: 2 12;
         vector-effect: non-scaling-stroke;
+        animation: signal-drift 11s linear infinite;
       }
 
-      .systems-map .node-ring {
-        fill: var(--paper);
+      .possibility-branch {
+        fill: none;
         stroke: var(--accent);
-        stroke-width: 2;
+        stroke-width: 1.4;
+        stroke-linecap: round;
+        stroke-dasharray: 3 8;
+        stroke-opacity: 0.58;
         vector-effect: non-scaling-stroke;
       }
 
-      .systems-map .node-core {
+      .field-node {
+        fill: var(--paper);
+        stroke: var(--ink);
+        stroke-width: 1.2;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .field-node.signal {
+        stroke: var(--accent);
+      }
+
+      .field-core {
         fill: var(--accent);
       }
 
-      .systems-map .stage-index {
-        fill: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 9px;
-        letter-spacing: 1px;
-      }
-
-      .systems-map .stage-name {
-        fill: var(--ink);
-        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-        font-size: 24px;
-        font-weight: 580;
-        letter-spacing: -0.7px;
-      }
-
-      .systems-map .stage-note {
+      .field-note {
         fill: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 9px;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.9px;
       }
 
-      .systems-map .caption {
-        fill: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 9px;
-        letter-spacing: 0.8px;
-      }
-
-      .systems-map .caption-mark {
+      .field-note.accent {
         fill: var(--accent);
-        font-size: 13px;
       }
 
-      .closing {
+      @keyframes signal-drift {
+        to { stroke-dashoffset: -56; }
+      }
+
+      .lenses {
+        position: relative;
+        padding: clamp(78px, 10vw, 124px) 0 clamp(92px, 12vw, 142px);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .lenses::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 5%;
+        width: min(34vw, 390px);
+        aspect-ratio: 1;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        opacity: 0.36;
+        clip-path: inset(48% 0 0 0);
+        pointer-events: none;
+      }
+
+      .lenses-head {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 0.65fr 1.35fr;
         gap: 48px;
-        padding: 40px 0 44px;
+        align-items: end;
+      }
+
+      .lenses-intro {
+        max-width: 600px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+
+      .lens-field {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 46px;
+      }
+
+      .lens-field::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom, var(--line-strong), var(--line), transparent 96%);
+      }
+
+      .lens {
+        position: relative;
+        min-height: 210px;
+        padding: 28px 48px 42px 0;
         border-top: 1px solid var(--line);
       }
 
-      .margin-note {
-        margin: 0;
-        color: var(--accent);
-        font-size: 0.67rem;
-        font-weight: 650;
-        line-height: 1.8;
+      .lens:nth-child(even) {
+        padding-left: 56px;
+        padding-right: 0;
       }
 
-      .public-note {
+      .lens:nth-child(3) {
+        padding-top: 44px;
+      }
+
+      .lens:nth-child(4) {
+        padding-top: 74px;
+      }
+
+      .lens:nth-child(4)::before {
+        content: "";
+        position: absolute;
+        left: 30px;
+        top: 25px;
+        width: 1px;
+        height: 40px;
+        background: var(--accent);
+        transform: rotate(38deg);
+        transform-origin: bottom;
+        opacity: 0.62;
+      }
+
+      .lens:nth-child(4)::after {
+        content: "";
+        position: absolute;
+        left: 45px;
+        top: 22px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 7px var(--accent-soft);
+      }
+
+      .lens-index {
+        color: var(--accent);
+        font-size: 0.67rem;
+        letter-spacing: 0.08em;
+      }
+
+      .lens h2 {
+        margin: 30px 0 12px;
+        font-size: clamp(2rem, 3.5vw, 3.55rem);
+        font-weight: 550;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      .lens p {
+        max-width: 390px;
         margin: 0;
         color: var(--muted);
-        font-size: 0.9rem;
         line-height: 1.65;
+      }
+
+      .principle {
+        display: grid;
+        grid-template-columns: 0.58fr 1.42fr;
+        align-items: end;
+        gap: 48px;
+        margin-top: 54px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .principle strong {
+        font-size: clamp(2rem, 4.2vw, 4.6rem);
+        font-weight: 520;
+        letter-spacing: -0.052em;
+        line-height: 0.98;
+      }
+
+      .between {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.65fr);
+        gap: clamp(58px, 10vw, 142px);
+        padding: clamp(96px, 13vw, 160px) 0;
+      }
+
+      .between h2 {
+        margin: 0;
+        max-width: 690px;
+        font-size: clamp(2.7rem, 5.7vw, 5.4rem);
+        font-weight: 540;
+        letter-spacing: -0.058em;
+        line-height: 0.98;
+      }
+
+      .between-copy {
+        align-self: end;
+      }
+
+      .between-copy::before {
+        content: "↳";
+        display: block;
+        margin-bottom: 18px;
+        color: var(--accent);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 1rem;
+      }
+
+      .between-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.78;
+      }
+
+      .public-edge {
+        display: grid;
+        grid-template-columns: 0.58fr 1.42fr;
+        gap: 48px;
+        align-items: start;
+        padding: 38px 0 48px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+      }
+
+      .public-edge p { margin: 0; }
+
+      .public-edge-copy {
+        display: flex;
+        justify-content: space-between;
+        gap: 36px;
+      }
+
+      .public-edge-copy > p {
+        max-width: 540px;
+        line-height: 1.65;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .hero-visual {
+          justify-self: center;
+          width: min(82vw, 510px);
+          margin-top: 8px;
+        }
+
+        .lenses-head,
+        .principle,
+        .public-edge {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 760px) {
@@ -348,79 +521,78 @@
         }
 
         .site-header {
-          min-height: 76px;
-        }
-
-        .hero,
-        .experience,
-        .closing {
-          grid-template-columns: 1fr;
+          min-height: 74px;
         }
 
         .hero {
-          gap: 34px;
-          padding-top: 74px;
+          gap: 42px;
+          padding-top: 76px;
         }
 
         h1 {
-          font-size: clamp(3rem, 15vw, 5.1rem);
+          font-size: clamp(3.3rem, 15.5vw, 5.3rem);
         }
 
-        .path {
+        .hero-copy {
+          font-size: 1rem;
+        }
+
+        .lens-field,
+        .between {
           grid-template-columns: 1fr;
-          gap: 0;
         }
 
-        .path-step {
-          min-height: auto;
-          flex-direction: row;
-          align-items: baseline;
-          gap: 24px;
-          padding: 15px 0;
-          border-top: 1px dashed var(--line);
+        .lens-field::before {
+          left: 11px;
+          background: linear-gradient(to bottom, var(--line-strong), transparent 100%);
         }
 
-        .path-arrow {
-          transform: rotate(90deg);
-          justify-self: center;
-          margin: -3px 0;
+        .lens,
+        .lens:nth-child(even),
+        .lens:nth-child(3),
+        .lens:nth-child(4) {
+          min-height: 0;
+          padding: 28px 0 34px 36px;
         }
 
-        .experience {
-          gap: 44px;
+        .lens:nth-child(4)::before {
+          left: 4px;
+          top: 11px;
+          height: 22px;
         }
 
-        .systems-map .stage-name {
-          font-size: 29px;
+        .lens:nth-child(4)::after {
+          left: 13px;
+          top: 7px;
         }
 
-        .systems-map .stage-index,
-        .systems-map .stage-note,
-        .systems-map .caption {
-          font-size: 10px;
+        .lens h2 {
+          margin-top: 18px;
         }
 
-        .systems-map .boundary-label {
-          font-size: 9px;
+        .principle {
+          gap: 18px;
+          margin-top: 34px;
         }
 
-        .closing {
+        .between {
+          gap: 38px;
+        }
+
+        .public-edge-copy {
+          flex-direction: column;
           gap: 22px;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-
-        *,
-        *::before,
-        *::after {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
           animation-duration: 0.001ms !important;
           animation-iteration-count: 1 !important;
           transition-duration: 0.001ms !important;
         }
+        .living-signal { stroke-dashoffset: 0; }
       }
     </style>
   </head>
@@ -431,118 +603,113 @@
           <span class="identity-mark" aria-hidden="true"></span>
           <span>f3tknco</span>
         </a>
-        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer" aria-label="Visit f3tknco on GitHub">
-          GitHub <span aria-hidden="true">↗</span>
-        </a>
+        <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer" aria-label="Visit f3tknco on GitHub">GitHub <span aria-hidden="true">↗</span></a>
       </header>
 
       <main id="top">
         <section class="hero" aria-labelledby="intro-heading">
-          <div>
-            <p class="eyebrow">Systems in motion</p>
-            <h1 id="intro-heading">Hi, I'm f3tknco. <em>Experiencing</em> the evolution of software.</h1>
+          <div class="hero-copy-block">
+            <p class="eyebrow">structured core / living edge</p>
+            <h1 id="intro-heading">I like finding structure in complexity — then seeing what can <em>grow</em> from it.</h1>
+            <p class="hero-copy">My background is in software engineering, but I tend to be drawn to relationships, boundaries, and the ways ideas and systems become coherent enough to evolve.</p>
           </div>
-          <div class="hero-copy">
-            <p>
-              Software engineer experiencing the evolution from traditional enterprise
-              application development toward modern application platforms and platform
-              engineering.
-            </p>
+
+          <div class="hero-visual">
+            <svg class="structured-field" viewBox="0 0 520 520" role="img" aria-labelledby="field-title field-desc">
+              <title id="field-title">Structure opening into possibility</title>
+              <desc id="field-desc">A precise grid and set of aligned nodes gradually give way to a copper signal that branches into new possibilities.</desc>
+              <defs>
+                <pattern id="field-grid-pattern" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M32 0H0V32" fill="none" stroke="#d5cec4" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="grid-opacity" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="white"/>
+                  <stop offset="0.56" stop-color="white" stop-opacity="0.72"/>
+                  <stop offset="1" stop-color="black" stop-opacity="0"/>
+                </linearGradient>
+                <mask id="grid-fade">
+                  <rect width="520" height="520" fill="url(#grid-opacity)"/>
+                </mask>
+              </defs>
+
+              <rect class="structure-grid" x="36" y="48" width="340" height="340" mask="url(#grid-fade)"/>
+              <path class="field-rule" d="M68 96H292V208H404"/>
+              <path class="field-rule faint" d="M100 64V336M164 64V304M228 64V272"/>
+              <path class="field-rule faint" d="M68 160H324M68 224H356M68 288H324"/>
+
+              <path class="signal-bed" d="M100 288 C166 288 171 224 228 224 C285 224 302 272 348 272 C401 272 393 348 448 348"/>
+              <path class="living-signal" d="M100 288 C166 288 171 224 228 224 C285 224 302 272 348 272 C401 272 393 348 448 348"/>
+              <path class="possibility-branch" d="M348 272 C379 248 391 205 430 190 C455 181 468 159 476 132"/>
+              <path class="possibility-branch" d="M404 320 C438 318 455 296 482 284"/>
+
+              <circle class="field-node" cx="100" cy="288" r="8"/>
+              <circle class="field-core" cx="100" cy="288" r="3"/>
+              <circle class="field-node" cx="228" cy="224" r="8"/>
+              <circle class="field-core" cx="228" cy="224" r="3"/>
+              <circle class="field-node signal" cx="348" cy="272" r="8"/>
+              <circle class="field-core" cx="348" cy="272" r="3"/>
+              <circle class="field-node signal" cx="448" cy="348" r="8"/>
+              <circle class="field-core" cx="448" cy="348" r="3"/>
+              <circle class="field-core" cx="476" cy="132" r="4"/>
+              <circle class="field-core" cx="482" cy="284" r="3"/>
+
+              <text class="field-note" x="68" y="82">STRUCTURE</text>
+              <text class="field-note" x="260" y="212">COHERENCE</text>
+              <text class="field-note accent" x="397" y="114">POSSIBILITY</text>
+              <text class="field-note accent" x="386" y="380">LIVING EDGE</text>
+            </svg>
           </div>
         </section>
 
-        <section class="evolution" aria-labelledby="evolution-heading">
-          <p class="section-label" id="evolution-heading">A path, not a checklist</p>
-          <div class="path" aria-label="Evolution from traditional applications to platform engineering">
-            <div class="path-step">
-              <span class="path-index">01</span>
-              <span class="path-name">traditional applications</span>
-            </div>
-            <span class="path-arrow" aria-hidden="true">→</span>
-            <div class="path-step">
-              <span class="path-index">02</span>
-              <span class="path-name">application platforms</span>
-            </div>
-            <span class="path-arrow" aria-hidden="true">→</span>
-            <div class="path-step">
-              <span class="path-index">03</span>
-              <span class="path-name">platform engineering</span>
-            </div>
+        <section class="lenses" aria-labelledby="lenses-heading">
+          <div class="lenses-head">
+            <p class="section-label" id="lenses-heading">ways of seeing / not a process</p>
+            <p class="lenses-intro">The same questions keep appearing in different forms. They are less a method than a set of lenses I tend to return to.</p>
+          </div>
+
+          <div class="lens-field">
+            <article class="lens" data-lens="structure">
+              <span class="lens-index">01 / CORE</span>
+              <h2>Structure</h2>
+              <p>What is actually here?</p>
+            </article>
+            <article class="lens" data-lens="relationships">
+              <span class="lens-index">02 / CONNECTION</span>
+              <h2>Relationships</h2>
+              <p>How do the pieces affect one another?</p>
+            </article>
+            <article class="lens" data-lens="boundaries">
+              <span class="lens-index">03 / RESPONSIBILITY</span>
+              <h2>Boundaries</h2>
+              <p>Where should responsibility live?</p>
+            </article>
+            <article class="lens" data-lens="emergence">
+              <span class="lens-index">04 / POSSIBILITY</span>
+              <h2>Emergence</h2>
+              <p>What becomes possible once the whole is coherent?</p>
+            </article>
+          </div>
+
+          <div class="principle">
+            <span class="principle-label">a recurring preference</span>
+            <strong>relationships over inventory</strong>
           </div>
         </section>
 
-        <section class="experience" aria-labelledby="experience-heading">
-          <div class="experience-copy">
-            <p class="section-label">What I keep running into</p>
-            <h2 id="experience-heading">The interesting part is usually between things.</h2>
-            <p>
-              Along the way, I've been working with frontend/backend separation, API
-              contracts, automated testing, CI/CD, GitOps, containers, Kubernetes and
-              security. What keeps pulling these topics together for me is the same
-              question: where should a responsibility live, and what boundary makes the
-              whole system easier to understand?
-            </p>
+        <section class="between" aria-labelledby="between-heading">
+          <h2 id="between-heading">The interesting part is usually between things.</h2>
+          <div class="between-copy">
+            <p>I’m usually less interested in collecting more pieces than in understanding how they fit together. Once the relationships make sense, the whole becomes easier to explain, change, and sometimes turn into something unexpected.</p>
           </div>
-
-          <svg class="systems-map" viewBox="0 0 640 420" role="img" aria-labelledby="map-title map-desc">
-            <title id="map-title">Connected engineering domains</title>
-            <desc id="map-desc">A continuous path moves through applications, contracts, delivery, and runtime, crossing boundaries along the way.</desc>
-
-            <g aria-hidden="true">
-              <line class="boundary-line" x1="177" y1="36" x2="177" y2="374"/>
-              <line class="boundary-line" x1="330" y1="36" x2="330" y2="374"/>
-              <line class="boundary-line" x1="484" y1="36" x2="484" y2="374"/>
-              <text class="boundary-label" x="169" y="61" transform="rotate(-90 169 61)">BOUNDARY</text>
-              <text class="boundary-label" x="322" y="61" transform="rotate(-90 322 61)">BOUNDARY</text>
-              <text class="boundary-label" x="476" y="61" transform="rotate(-90 476 61)">BOUNDARY</text>
-
-              <path class="route-halo" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
-              <path class="route" d="M82 91 C146 91 171 151 245 157 C309 162 308 236 378 239 C447 242 470 321 554 326"/>
-
-              <circle class="node-ring" cx="82" cy="91" r="8"/>
-              <circle class="node-core" cx="82" cy="91" r="3"/>
-              <circle class="node-ring" cx="245" cy="157" r="8"/>
-              <circle class="node-core" cx="245" cy="157" r="3"/>
-              <circle class="node-ring" cx="378" cy="239" r="8"/>
-              <circle class="node-core" cx="378" cy="239" r="3"/>
-              <circle class="node-ring" cx="554" cy="326" r="8"/>
-              <circle class="node-core" cx="554" cy="326" r="3"/>
-
-              <g class="map-stage" data-stage="applications">
-                <text class="stage-index" x="28" y="35">01</text>
-                <text class="stage-name" x="28" y="61">applications</text>
-                <text class="stage-note" x="28" y="78">INTENT / BEHAVIOR</text>
-              </g>
-              <g class="map-stage" data-stage="contracts">
-                <text class="stage-index" x="267" y="116">02</text>
-                <text class="stage-name" x="267" y="142">contracts</text>
-                <text class="stage-note" x="267" y="159">EXPECTATIONS / AGREEMENT</text>
-              </g>
-              <g class="map-stage" data-stage="delivery">
-                <text class="stage-index" x="340" y="269">03</text>
-                <text class="stage-name" x="340" y="295">delivery</text>
-                <text class="stage-note" x="340" y="312">CHANGE / REPEATABILITY</text>
-              </g>
-              <g class="map-stage" data-stage="runtime">
-                <text class="stage-index" x="465" y="352">04</text>
-                <text class="stage-name" x="465" y="378">runtime</text>
-                <text class="stage-note" x="465" y="395">SYSTEM / REALITY</text>
-              </g>
-
-              <text class="caption-mark" x="28" y="390">↳</text>
-              <text class="caption" x="47" y="390">relationships over inventory</text>
-            </g>
-          </svg>
         </section>
       </main>
 
-      <footer class="closing">
-        <p class="margin-note">principles → boundaries → systems → implementation</p>
-        <p class="public-note">
-          Most of this experience comes from real internal systems rather than public
-          projects, so this site is less a portfolio and more a small place for things
-          I can make public.
-        </p>
+      <footer class="public-edge">
+        <p class="section-label">public edge</p>
+        <div class="public-edge-copy">
+          <p>This is a small public edge of a much larger set of things I explore, build, and think about.</p>
+          <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer">github.com/f3tknco <span aria-hidden="true">↗</span></a>
+        </div>
       </footer>
     </div>
   </body>
