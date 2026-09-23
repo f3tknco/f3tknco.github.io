@@ -30,7 +30,7 @@ class HomepageContractTest(unittest.TestCase):
         self.assertNotIn('emergence', LOWER)
 
     def test_work_specific_identity_is_absent(self):
-        for forbidden in ('case2', 'csc', 'kubernetes', 'gitops', 'ci/cd', 'openapi'):
+        for forbidden in ('case2', 'csc', 'kubernetes', 'gitops', 'ci/cd', 'openapi', 'notion', 'obsidian'):
             self.assertNotIn(forbidden, LOWER)
 
     def test_visual_remains_dependency_free_and_accessible(self):
@@ -40,6 +40,19 @@ class HomepageContractTest(unittest.TestCase):
         self.assertIn('<desc id="visual-desc">', HTML)
         self.assertNotIn('<script src=', LOWER)
         self.assertNotIn('<link rel="stylesheet" href=', LOWER)
+
+    def test_knowledge_ecosystem_is_generalized(self):
+        self.assertIn('a living knowledge system', LOWER)
+        self.assertIn('practice', LOWER)
+        self.assertIn('reflection', LOWER)
+        self.assertIn('field knowledge', LOWER)
+        self.assertIn('principles &amp; patterns', LOWER)
+        self.assertIn('id="knowledge-canvas"', LOWER)
+
+    def test_knowledge_ecosystem_is_interactive_and_accessible(self):
+        self.assertIn('data-knowledge-node=', LOWER)
+        self.assertIn('aria-pressed=', LOWER)
+        self.assertIn('aria-describedby="knowledge-description"', LOWER)
 
     def test_reduced_motion_support_exists(self):
         self.assertIn('prefers-reduced-motion', LOWER)
