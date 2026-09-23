@@ -33,12 +33,13 @@ class HomepageContractTest(unittest.TestCase):
         for forbidden in ('case2', 'csc', 'kubernetes', 'gitops', 'ci/cd', 'openapi', 'notion', 'obsidian'):
             self.assertNotIn(forbidden, LOWER)
 
-    def test_visual_remains_dependency_free_and_accessible(self):
+    def test_visual_remains_accessible_and_threejs_is_the_only_visual_dependency(self):
         self.assertIn('class="systems-visual"', HTML)
         self.assertIn('role="img"', HTML)
         self.assertIn('<title id="visual-title">', HTML)
         self.assertIn('<desc id="visual-desc">', HTML)
-        self.assertNotIn('<script src=', LOWER)
+        self.assertIn('three.min.js', LOWER)
+        self.assertNotIn('cdn.tailwindcss.com', LOWER)
         self.assertNotIn('<link rel="stylesheet" href=', LOWER)
 
     def test_knowledge_ecosystem_is_generalized(self):
@@ -47,7 +48,10 @@ class HomepageContractTest(unittest.TestCase):
         self.assertIn('reflection', LOWER)
         self.assertIn('field knowledge', LOWER)
         self.assertIn('principles &amp; patterns', LOWER)
-        self.assertIn('id="knowledge-canvas"', LOWER)
+        self.assertIn('id="knowledge-scene"', LOWER)
+        self.assertIn('new three.orthographiccamera', LOWER)
+        self.assertIn('new three.tubegeometry', LOWER)
+        self.assertIn('new three.webglrenderer', LOWER)
 
     def test_knowledge_ecosystem_is_interactive_and_accessible(self):
         self.assertIn('data-knowledge-node=', LOWER)
