@@ -86,8 +86,8 @@
 
       .identity,
       .github-link,
-      .eyebrow,
-      .interest-index {
+      .interest-index,
+      .knowledge-motion {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
 
@@ -160,42 +160,31 @@
 
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1.14fr) minmax(320px, 0.86fr);
+        grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
         align-items: center;
-        gap: clamp(44px, 7vw, 96px);
-        padding: clamp(82px, 10vw, 126px) 0 clamp(74px, 9vw, 110px);
-      }
-
-      .eyebrow {
-        margin: 0;
-        color: var(--accent);
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        gap: clamp(48px, 7vw, 92px);
+        padding: clamp(92px, 11vw, 142px) 0 clamp(96px, 11vw, 136px);
       }
 
       h1 {
-        max-width: 760px;
-        margin: 24px 0 30px;
-        font-size: clamp(3.3rem, 6.5vw, 6.5rem);
-        font-weight: 540;
-        letter-spacing: -0.065em;
-        line-height: 0.94;
+        max-width: 820px;
+        margin: 0 0 34px;
+        font-size: clamp(3.55rem, 5.9vw, 5.85rem);
+        font-weight: 500;
+        letter-spacing: -0.058em;
+        line-height: 0.98;
+        text-wrap: balance;
       }
 
-      h1 em {
-        color: var(--accent);
-        font-family: Georgia, "Times New Roman", serif;
-        font-weight: 400;
-      }
+      .hero-line { display: block; }
+      .hero-accent { color: var(--accent); }
 
       .hero-copy {
-        max-width: 620px;
+        max-width: 590px;
         margin: 0;
         color: var(--muted);
-        font-size: clamp(1rem, 1.2vw, 1.12rem);
-        line-height: 1.72;
+        font-size: clamp(1.02rem, 1.25vw, 1.14rem);
+        line-height: 1.76;
       }
 
       .hero-visual {
@@ -268,56 +257,49 @@
       }
 
       .interests {
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
-        padding: 34px 0 42px;
+        padding: clamp(12px, 2vw, 20px) 0 clamp(82px, 10vw, 118px);
       }
 
       .interests-title {
-        margin: 0 0 26px;
-        color: var(--muted);
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
+        max-width: 720px;
+        margin: 0 0 clamp(44px, 6vw, 72px);
+        font-size: clamp(2rem, 3.4vw, 3.15rem);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+        line-height: 1.08;
       }
 
-      .interest-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0;
-      }
+      .interest-grid { border-top: 1px solid var(--line-strong); }
 
       .interest {
-        min-height: 160px;
-        padding: 24px 36px 8px 0;
-        border-top: 1px solid var(--line-strong);
-      }
-
-      .interest + .interest {
-        padding-left: 36px;
-        border-left: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: 54px minmax(220px, 0.75fr) minmax(0, 1.25fr);
+        align-items: baseline;
+        gap: clamp(20px, 4vw, 56px);
+        padding: 28px 0 30px;
+        border-bottom: 1px solid var(--line);
       }
 
       .interest-index {
         color: var(--accent);
-        font-size: 0.65rem;
-        letter-spacing: 0.08em;
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
       }
 
       .interest h2 {
-        margin: 24px 0 10px;
-        font-size: clamp(1.55rem, 2.5vw, 2.35rem);
-        font-weight: 560;
-        letter-spacing: -0.04em;
+        margin: 0;
+        font-size: clamp(1.42rem, 2.1vw, 2rem);
+        font-weight: 520;
+        letter-spacing: -0.032em;
+        line-height: 1.12;
       }
 
       .interest p {
-        max-width: 320px;
+        max-width: 590px;
         margin: 0;
         color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.6;
+        font-size: 0.98rem;
+        line-height: 1.72;
       }
 
 
@@ -353,48 +335,28 @@
 
       .knowledge-header {
         display: grid;
-        grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1.1fr);
+        grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.8fr);
         gap: clamp(44px, 8vw, 112px);
         align-items: end;
-        margin-bottom: clamp(36px, 5vw, 66px);
-      }
-
-      .knowledge-eyebrow,
-      .knowledge-node,
-      .knowledge-motion {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      }
-
-      .knowledge-eyebrow {
-        margin: 0 0 18px;
-        color: #d48a5d;
-        font-size: 0.67rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        margin-bottom: clamp(42px, 6vw, 72px);
       }
 
       .knowledge-heading {
-        max-width: 640px;
+        max-width: 620px;
         margin: 0;
-        font-size: clamp(2.5rem, 5.2vw, 5.8rem);
-        font-weight: 480;
-        letter-spacing: -0.06em;
-        line-height: 0.98;
-      }
-
-      .knowledge-heading em {
-        color: #d48a5d;
-        font-family: Georgia, "Times New Roman", serif;
-        font-weight: 400;
+        font-size: clamp(2.45rem, 4.5vw, 4.75rem);
+        font-weight: 500;
+        letter-spacing: -0.052em;
+        line-height: 1.01;
+        text-wrap: balance;
       }
 
       .knowledge-copy {
-        max-width: 520px;
-        margin: 0 0 4px;
+        max-width: 500px;
+        margin: 0 0 5px;
         color: var(--night-muted);
-        font-size: clamp(1rem, 1.3vw, 1.14rem);
-        line-height: 1.75;
+        font-size: clamp(1rem, 1.22vw, 1.1rem);
+        line-height: 1.76;
       }
 
       .knowledge-stage {
@@ -435,16 +397,16 @@
         transform: translate(-50%, -50%);
         min-width: 44px;
         min-height: 44px;
-        padding: 8px 11px;
-        border: 1px solid rgba(243, 240, 234, 0.16);
+        padding: 8px 12px;
+        border: 1px solid rgba(243, 240, 234, 0.15);
         border-radius: 999px;
-        background: rgba(17, 19, 21, 0.62);
-        color: rgba(243, 240, 234, 0.63);
-        font-size: clamp(0.67rem, 1vw, 0.78rem);
-        font-weight: 700;
-        letter-spacing: 0.015em;
+        background: rgba(17, 19, 21, 0.6);
+        color: rgba(243, 240, 234, 0.7);
+        font-size: clamp(0.72rem, 1vw, 0.8rem);
+        font-weight: 600;
+        letter-spacing: -0.005em;
         cursor: pointer;
-        opacity: 0.86;
+        opacity: 0.9;
         backdrop-filter: blur(8px);
         box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
         transition: color 180ms ease, border-color 180ms ease, background 180ms ease, opacity 180ms ease, transform 180ms ease;
@@ -489,22 +451,14 @@
       }
 
       .knowledge-caption {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        margin-top: 18px;
+        max-width: 680px;
+        margin-top: 20px;
         color: #777f88;
-        font-size: 0.74rem;
-        line-height: 1.6;
+        font-size: 0.82rem;
+        line-height: 1.7;
       }
 
       .knowledge-caption p { margin: 0; }
-
-      .knowledge-caption .loop {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        white-space: nowrap;
-      }
 
       .site-footer {
         display: flex;
@@ -523,11 +477,18 @@
       @media (max-width: 900px) {
         .hero {
           grid-template-columns: 1fr;
+          gap: 54px;
         }
 
         .hero-visual {
           justify-self: center;
-          width: min(78vw, 500px);
+          width: min(74vw, 470px);
+          opacity: 0.88;
+        }
+
+        .interest {
+          grid-template-columns: 44px minmax(190px, 0.7fr) minmax(0, 1.3fr);
+          gap: 24px;
         }
       }
 
@@ -541,28 +502,45 @@
         }
 
         .hero {
-          gap: 34px;
-          padding: 66px 0 72px;
+          gap: 46px;
+          padding: 74px 0 86px;
         }
 
         h1 {
-          font-size: clamp(3.15rem, 15vw, 5rem);
+          max-width: 100%;
+          margin-bottom: 28px;
+          font-size: clamp(3rem, 11.7vw, 4.25rem);
+          line-height: 1;
+          letter-spacing: -0.052em;
         }
 
+        .hero-line { display: block; }
+
         .hero-copy {
+          max-width: 34rem;
           font-size: 1rem;
         }
 
-        .interest-grid {
-          grid-template-columns: 1fr;
+        .interests {
+          padding-bottom: 78px;
         }
 
-        .interest,
-        .interest + .interest {
-          min-height: 0;
-          padding: 26px 0 30px;
-          border-left: 0;
-          border-top: 1px solid var(--line);
+        .interests-title {
+          margin-bottom: 34px;
+          font-size: clamp(1.85rem, 8vw, 2.45rem);
+        }
+
+        .interest {
+          grid-template-columns: 38px minmax(0, 1fr);
+          gap: 12px 14px;
+          padding: 24px 0 26px;
+        }
+
+        .interest h2 { font-size: 1.42rem; }
+
+        .interest p {
+          grid-column: 2;
+          font-size: 0.96rem;
         }
 
         .site-footer {
@@ -600,7 +578,8 @@
         }
 
         .knowledge-heading {
-          font-size: clamp(2.7rem, 12vw, 4.4rem);
+          font-size: clamp(2.45rem, 10.5vw, 3.75rem);
+          line-height: 1.02;
         }
 
         .knowledge-stage {
@@ -614,13 +593,7 @@
         }
 
         .knowledge-caption {
-          align-items: flex-start;
-          flex-direction: column;
-          gap: 7px;
-        }
-
-        .knowledge-caption .loop {
-          white-space: normal;
+          max-width: 32rem;
         }
       }
 
@@ -649,9 +622,12 @@
       <main id="top">
         <section class="hero" aria-labelledby="intro-heading">
           <div>
-            <p class="eyebrow">software engineering · systems thinking · visual thinking</p>
-            <h1 id="intro-heading">Hi, I'm f3tknco. I like making complex ideas easier to <em>understand</em>.</h1>
-            <p class="hero-copy">My background is in software engineering. I’m interested in systems thinking, visual thinking, and continuous learning.</p>
+            <h1 id="intro-heading">
+              <span class="hero-line">Hi, I'm f3tknco.</span>
+              <span class="hero-line">I make complex ideas</span>
+              <span class="hero-line">easier to <span class="hero-accent">understand.</span></span>
+            </h1>
+            <p class="hero-copy">Software engineering is my background. I like making complex ideas easier to understand by exploring systems, making relationships visible, and refining what holds up in practice.</p>
           </div>
 
           <div class="hero-visual">
@@ -697,22 +673,22 @@
         </section>
 
         <section class="interests" aria-labelledby="interests-heading">
-          <h2 class="interests-title" id="interests-heading">Interests</h2>
+          <h2 class="interests-title" id="interests-heading">Three threads I keep returning to.</h2>
           <div class="interest-grid">
             <article class="interest">
               <span class="interest-index">01</span>
               <h2>Systems thinking</h2>
-              <p>How parts interact and shape the whole.</p>
+              <p>Understanding how parts interact, where boundaries matter, and how local decisions shape the whole.</p>
             </article>
             <article class="interest">
               <span class="interest-index">02</span>
               <h2>Visual thinking</h2>
-              <p>Using diagrams and visual structure to make ideas clearer.</p>
+              <p>Using spatial structure and visual models to make relationships easier to see, discuss, and refine.</p>
             </article>
             <article class="interest">
               <span class="interest-index">03</span>
               <h2>Continuous learning</h2>
-              <p>Exploring, testing, and refining as understanding grows.</p>
+              <p>Exploring, testing, and revising ideas until useful patterns emerge from real work.</p>
             </article>
           </div>
         </section>
@@ -721,10 +697,7 @@
         <section class="knowledge-section" aria-labelledby="knowledge-heading">
           <div class="knowledge-inner">
             <header class="knowledge-header">
-              <div>
-                <p class="knowledge-eyebrow">A living knowledge system</p>
-                <h2 class="knowledge-heading" id="knowledge-heading">Different roles.<br>One <em>learning loop.</em></h2>
-              </div>
+              <h2 class="knowledge-heading" id="knowledge-heading">A living knowledge system.</h2>
               <p class="knowledge-copy" id="knowledge-description">Practice creates experience. Reflection preserves change. Field knowledge captures what works in context. Principles and patterns make that understanding reusable. Each feeds the others.</p>
             </header>
 
@@ -741,8 +714,7 @@
             </figure>
 
             <div class="knowledge-caption" aria-hidden="true">
-              <p>Not a pipeline. A shared field of practice, memory, context, and reusable insight.</p>
-              <p class="loop">practice ↔ reflection ↔ field knowledge ↔ principles &amp; patterns</p>
+              <p>Not a pipeline, but a shared field where practice, memory, context, and reusable insight continually reshape one another.</p>
             </div>
           </div>
         </section>
