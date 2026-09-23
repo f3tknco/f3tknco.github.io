@@ -418,7 +418,12 @@
           linear-gradient(180deg, rgba(255,255,255,0.018), transparent 48%, rgba(255,255,255,0.012));
       }
 
-      #knowledge-canvas {
+      #knowledge-scene {
+        position: absolute;
+        inset: 0;
+      }
+
+      #knowledge-scene canvas {
         display: block;
         width: 100%;
         height: 100%;
@@ -629,6 +634,7 @@
         .visual-path { stroke-dashoffset: 0; }
       }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
   <body>
     <div class="shell">
@@ -723,7 +729,7 @@
             </header>
 
             <figure class="knowledge-stage" id="knowledge-stage">
-              <canvas id="knowledge-canvas" role="img" aria-describedby="knowledge-description"></canvas>
+              <div id="knowledge-scene" role="img" aria-describedby="knowledge-description"></div>
 
               <button class="knowledge-node" type="button" data-knowledge-node="practice" aria-pressed="false">Practice</button>
               <button class="knowledge-node" type="button" data-knowledge-node="reflection" aria-pressed="false">Reflection</button>
@@ -751,428 +757,534 @@
     <script>
       (() => {
         const stage = document.getElementById('knowledge-stage');
-        const canvas = document.getElementById('knowledge-canvas');
-        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('knowledge-scene');
         const controls = [...stage.querySelectorAll('[data-knowledge-node]')];
         const motionButton = document.getElementById('knowledge-motion');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-        const palette = {
-          accent: '#c9794b',
-          accentBright: '#e2a27c'
-        };
-
-        const nodes = {
-          practice: { x: -2.75, y: 0.12, z: -1.68, shape: 'blocks' },
-          reflection: { x: 2.65, y: 0.15, z: -1.5, shape: 'layers' },
-          field: { x: 2.48, y: 0.12, z: 1.72, shape: 'frame' },
-          principles: { x: -2.48, y: 0.16, z: 1.7, shape: 'lattice' }
-        };
-
-        const routes = [
-          ['practice', 'reflection', 1.35, -0.15],
-          ['reflection', 'field', 1.18, 0.16],
-          ['field', 'principles', 1.38, -0.12],
-          ['principles', 'practice', 1.14, 0.12],
-          ['practice', 'field', 1.78, 0.48],
-          ['reflection', 'principles', 1.56, -0.44]
-        ];
-
-        let width = 1;
-        let height = 1;
-        let active = null;
-        let hover = null;
-        let paused = reducedMotion.matches;
-        let visible = true;
-        let lastTime = performance.now();
-        let elapsed = 0;
-        const pointer = { x: 0, y: 0, inside: false };
-        const projectedNodes = {};
-
-        function vec(x = 0, y = 0, z = 0) { return { x, y, z }; }
-        function add(a, b) { return vec(a.x + b.x, a.y + b.y, a.z + b.z); }
-        function sub(a, b) { return vec(a.x - b.x, a.y - b.y, a.z - b.z); }
-        function scale(a, s) { return vec(a.x * s, a.y * s, a.z * s); }
-        function dot(a, b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
-        function cross(a, b) { return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x); }
-        function length(a) { return Math.hypot(a.x, a.y, a.z) || 1; }
-        function norm(a) { return scale(a, 1 / length(a)); }
-        function mix(a, b, t) { return add(scale(a, 1 - t), scale(b, t)); }
-        function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
-        function camera() {
-          const px = pointer.inside ? pointer.x : 0;
-          const py = pointer.inside ? pointer.y : 0;
-          const pos = vec(px * 0.54, 5.25 - py * 0.26, 8.35);
-          const target = vec(px * 0.14, 0.58 + py * 0.08, 0);
-          const forward = norm(sub(target, pos));
-          const right = norm(cross(forward, vec(0, 1, 0)));
-          const up = norm(cross(right, forward));
-          return { pos, forward, right, up, focal: 6.9 };
+        if (!window.THREE) {
+          motionButton.disabled = true;
+          motionButton.textContent = '3D unavailable';
+          return;
         }
 
-        function project(point, cam) {
-          const rel = sub(point, cam.pos);
-          const cx = dot(rel, cam.right);
-          const cy = dot(rel, cam.up);
-          const cz = dot(rel, cam.forward);
-          const s = cam.focal / Math.max(0.28, cz);
-          const unit = Math.min(width, height) * 0.112;
-          return { x: width * 0.5 + cx * s * unit, y: height * 0.53 - cy * s * unit, z: cz, s };
-        }
+        const ECO_DATA = {
+          practice: {
+            name: 'Practice',
+            color: 0x7c8da4,
+            pos: { x: -4.6, y: 1.15, z: -4.3 },
+            geom: 'blocks'
+          },
+          reflection: {
+            name: 'Reflection',
+            color: 0xb08a62,
+            pos: { x: 4.6, y: 1.15, z: -4.3 },
+            geom: 'stack'
+          },
+          field: {
+            name: 'Field Knowledge',
+            color: 0x729884,
+            pos: { x: 4.6, y: 1.15, z: 4.3 },
+            geom: 'framework'
+          },
+          principles: {
+            name: 'Principles & Patterns',
+            color: 0x81758f,
+            pos: { x: -4.6, y: 1.15, z: 4.3 },
+            geom: 'crystal'
+          }
+        };
 
-        function cubic(a, b, c, d, t) {
-          const u = 1 - t;
-          return vec(
-            u*u*u*a.x + 3*u*u*t*b.x + 3*u*t*t*c.x + t*t*t*d.x,
-            u*u*u*a.y + 3*u*u*t*b.y + 3*u*t*t*c.y + t*t*t*d.y,
-            u*u*u*a.z + 3*u*u*t*b.z + 3*u*t*t*c.z + t*t*t*d.z
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x111315, 0.026);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setClearColor(0x111315, 0);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.15;
+        renderer.domElement.setAttribute('aria-hidden', 'true');
+        container.appendChild(renderer.domElement);
+
+        const camera = new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 100);
+        const cameraBase = new THREE.Vector3(14.5, 13.2, 14.5);
+        camera.position.copy(cameraBase);
+        camera.lookAt(0, 0.8, 0);
+
+        const clock = new THREE.Clock();
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        const targetPointer = new THREE.Vector2();
+
+        const nodes = {};
+        const connections = [];
+        const ambient = [];
+        let activeNodeId = null;
+        let hoverNodeId = null;
+        let motionPaused = reducedMotion.matches;
+        let stageVisible = true;
+
+        const ambientLight = new THREE.AmbientLight(0xfff7ef, 0.42);
+        scene.add(ambientLight);
+
+        const keyLight = new THREE.DirectionalLight(0xfff4e8, 0.82);
+        keyLight.position.set(9, 18, 11);
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight(0xa9b5c2, 0.46);
+        rimLight.position.set(-12, 5, -10);
+        scene.add(rimLight);
+
+        buildEcosystem();
+        setupInteractions();
+        resize();
+        updateMotionButton();
+        requestAnimationFrame(animate);
+
+        function buildEcosystem() {
+          const islandGeo = new THREE.CylinderGeometry(8.25, 7.65, 1.35, 8);
+          const islandMat = new THREE.MeshStandardMaterial({
+            color: 0x252321,
+            roughness: 0.82,
+            metalness: 0.1,
+            flatShading: true
+          });
+          const island = new THREE.Mesh(islandGeo, islandMat);
+          island.position.y = -0.68;
+          scene.add(island);
+
+          const islandWire = new THREE.LineSegments(
+            new THREE.WireframeGeometry(islandGeo),
+            new THREE.LineBasicMaterial({ color: 0x6f625a, transparent: true, opacity: 0.18 })
           );
-        }
+          island.add(islandWire);
 
-        function routePoint(route, t, lane = 0) {
-          const [aKey, bKey, heightLift, bend] = route;
-          const a = nodes[aKey];
-          const b = nodes[bKey];
-          const start = vec(a.x, a.y + 0.62, a.z);
-          const end = vec(b.x, b.y + 0.62, b.z);
-          const mid = mix(start, end, 0.5);
-          const dx = end.x - start.x;
-          const dz = end.z - start.z;
-          const sideways = norm(vec(-dz, 0, dx));
-          const laneOffset = (lane - 1) * 0.095;
-          const c1 = add(mix(start, mid, 0.56), add(scale(sideways, bend + laneOffset), vec(0, heightLift, 0)));
-          const c2 = add(mix(mid, end, 0.44), add(scale(sideways, bend + laneOffset), vec(0, heightLift * 0.92, 0)));
-          const base = cubic(start, c1, c2, end, t);
-          const ripple = Math.sin(t * Math.PI * 4 + lane * 2.1 + elapsed * 0.0008) * 0.045 * Math.sin(Math.PI * t);
-          return add(base, scale(sideways, ripple));
-        }
+          const coreRing = new THREE.Mesh(
+            new THREE.RingGeometry(1.4, 4.1, 8),
+            new THREE.MeshBasicMaterial({
+              color: 0xb86232,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.08,
+              wireframe: true
+            })
+          );
+          coreRing.rotation.x = Math.PI / 2;
+          coreRing.position.y = 0.03;
+          scene.add(coreRing);
 
-        function face(points, fill, stroke, cam, alpha = 1) {
-          const p = points.map(v => project(v, cam));
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.beginPath();
-          ctx.moveTo(p[0].x, p[0].y);
-          for (let i = 1; i < p.length; i++) ctx.lineTo(p[i].x, p[i].y);
-          ctx.closePath();
-          ctx.fillStyle = fill;
-          ctx.fill();
-          if (stroke) {
-            ctx.strokeStyle = stroke;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
+          const innerRing = new THREE.Mesh(
+            new THREE.RingGeometry(0.9, 1.05, 48),
+            new THREE.MeshBasicMaterial({
+              color: 0xd48a5d,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.2
+            })
+          );
+          innerRing.rotation.x = Math.PI / 2;
+          innerRing.position.y = 0.055;
+          scene.add(innerRing);
 
-        function drawCuboid(center, size, cam, alpha) {
-          const x = size.x / 2, z = size.z / 2, y0 = center.y, y1 = center.y + size.y;
-          const v = {
-            a: vec(center.x-x,y0,center.z-z), b: vec(center.x+x,y0,center.z-z), c: vec(center.x+x,y0,center.z+z), d: vec(center.x-x,y0,center.z+z),
-            A: vec(center.x-x,y1,center.z-z), B: vec(center.x+x,y1,center.z-z), C: vec(center.x+x,y1,center.z+z), D: vec(center.x-x,y1,center.z+z)
-          };
-          face([v.A,v.B,v.C,v.D], 'rgba(243,240,234,.70)', null, cam, alpha);
-          face([v.B,v.b,v.c,v.C], 'rgba(184,98,50,.38)', null, cam, alpha);
-          face([v.D,v.C,v.c,v.d], 'rgba(91,77,69,.45)', null, cam, alpha);
-        }
+          Object.entries(ECO_DATA).forEach(([id, data]) => createNode(id, data));
 
-        function drawLayers(n, cam, alpha) {
-          for (let i = 0; i < 3; i++) {
-            const y = n.y + 0.12 + i * 0.19;
-            const r = 0.46 - i * 0.025;
-            const pts = [];
-            for (let s = 0; s < 28; s++) {
-              const a = s / 28 * Math.PI * 2;
-              pts.push(vec(n.x + Math.cos(a) * r, y, n.z + Math.sin(a) * r * 0.78));
+          const keys = Object.keys(ECO_DATA);
+          for (let i = 0; i < keys.length; i++) {
+            for (let j = i + 1; j < keys.length; j++) {
+              createConnection(keys[i], keys[j]);
             }
-            face(pts, i === 2 ? 'rgba(243,240,234,.64)' : 'rgba(184,98,50,.28)', 'rgba(243,240,234,.12)', cam, alpha);
           }
+
+          createAmbientParticles();
         }
 
-        function drawFrame(n, cam, alpha) {
-          const y = n.y + 0.18;
-          const outer = 0.5;
-          const inner = 0.28;
-          const pts = [
-            vec(n.x-outer,y,n.z-outer),vec(n.x+outer,y,n.z-outer),vec(n.x+outer,y,n.z+outer),vec(n.x-outer,y,n.z+outer),
-            vec(n.x-inner,y,n.z-inner),vec(n.x+inner,y,n.z-inner),vec(n.x+inner,y,n.z+inner),vec(n.x-inner,y,n.z+inner)
-          ].map(p => project(p, cam));
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.strokeStyle = 'rgba(243,240,234,.56)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          [0,1,2,3,0].forEach((idx,i) => i ? ctx.lineTo(pts[idx].x,pts[idx].y) : ctx.moveTo(pts[idx].x,pts[idx].y));
-          [4,5,6,7,4].forEach((idx,i) => i ? ctx.lineTo(pts[idx].x,pts[idx].y) : ctx.moveTo(pts[idx].x,pts[idx].y));
-          for(let i=0;i<4;i++){ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[i+4].x,pts[i+4].y);}
-          ctx.stroke();
-          ctx.restore();
-          drawCuboid(vec(n.x-0.15,n.y,n.z-0.15), {x:0.3,y:0.56,z:0.3}, cam, alpha * 0.8);
-        }
+        function createNode(id, data) {
+          const group = new THREE.Group();
+          group.position.set(data.pos.x, data.pos.y, data.pos.z);
+          group.userData.baseY = data.pos.y;
 
-        function drawLattice(n, cam, alpha) {
-          const top = vec(n.x, n.y + 0.94, n.z);
-          const ring = [];
-          for(let i=0;i<5;i++){
-            const a = i/5*Math.PI*2 - Math.PI/2;
-            ring.push(vec(n.x + Math.cos(a)*0.48, n.y + 0.18, n.z + Math.sin(a)*0.43));
-          }
-          for(let i=0;i<5;i++){
-            face([top, ring[i], ring[(i+1)%5]], i%2 ? 'rgba(184,98,50,.34)' : 'rgba(243,240,234,.52)', 'rgba(243,240,234,.10)', cam, alpha);
-          }
-        }
+          const material = new THREE.MeshPhysicalMaterial({
+            color: data.color,
+            emissive: data.color,
+            emissiveIntensity: 0.22,
+            transparent: true,
+            opacity: 0.88,
+            roughness: 0.24,
+            metalness: 0.35,
+            transmission: 0.22,
+            clearcoat: 0.8
+          });
 
-        function drawNode(key, cam) {
-          const n = nodes[key];
-          const focus = active || hover;
-          const selected = focus === key;
-          const alpha = focus && !selected ? 0.32 : 1;
-          const ground = project(vec(n.x, 0.02, n.z), cam);
+          let mesh;
 
-          ctx.save();
-          ctx.globalAlpha = alpha * 0.22;
-          ctx.fillStyle = '#000';
-          ctx.beginPath();
-          ctx.ellipse(ground.x, ground.y, 34 * ground.s * 0.32, 11 * ground.s * 0.32, 0, 0, Math.PI*2);
-          ctx.fill();
-          ctx.restore();
+          if (data.geom === 'blocks') {
+            const holder = new THREE.Group();
+            const main = new THREE.Mesh(new THREE.BoxGeometry(1.65, 2.25, 1.65), material);
+            main.position.y = 0.15;
+            main.userData = { id, isNode: true };
+            holder.add(main);
 
-          if (selected) {
-            const p = project(vec(n.x, n.y + 0.5, n.z), cam);
-            const glow = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,58);
-            glow.addColorStop(0,'rgba(201,121,75,.20)');
-            glow.addColorStop(1,'rgba(201,121,75,0)');
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(p.x,p.y,58,0,Math.PI*2);
-            ctx.fill();
-          }
-
-          if (n.shape === 'blocks') {
-            drawCuboid(vec(n.x-0.18,n.y,n.z+0.06), {x:0.46,y:0.62,z:0.46}, cam, alpha);
-            drawCuboid(vec(n.x+0.22,n.y+0.03,n.z-0.08), {x:0.34,y:0.44,z:0.34}, cam, alpha*0.86);
-          } else if (n.shape === 'layers') {
-            drawLayers(n, cam, alpha);
-          } else if (n.shape === 'frame') {
-            drawFrame(n, cam, alpha);
+            const secondary = new THREE.Mesh(
+              new THREE.BoxGeometry(0.74, 0.92, 0.74),
+              material.clone()
+            );
+            secondary.material.opacity = 0.72;
+            secondary.position.set(1.05, -0.38, 0.42);
+            secondary.userData = { id, isNode: true };
+            holder.add(secondary);
+            mesh = main;
+            group.add(holder);
+          } else if (data.geom === 'stack') {
+            const holder = new THREE.Group();
+            for (let i = 0; i < 3; i++) {
+              const layer = new THREE.Mesh(
+                new THREE.CylinderGeometry(1.35 - i * 0.07, 1.35 - i * 0.07, 0.36, 24),
+                i === 2 ? material : material.clone()
+              );
+              layer.material.opacity = 0.64 + i * 0.1;
+              layer.position.y = -0.62 + i * 0.52;
+              layer.userData = { id, isNode: true };
+              holder.add(layer);
+              if (i === 2) mesh = layer;
+            }
+            group.add(holder);
           } else {
-            drawLattice(n, cam, alpha);
+            const geometry = data.geom === 'framework'
+              ? new THREE.OctahedronGeometry(1.52, 0)
+              : new THREE.IcosahedronGeometry(1.55, 0);
+            mesh = new THREE.Mesh(geometry, material);
+            mesh.userData = { id, isNode: true };
+            group.add(mesh);
+
+            const inner = new THREE.Mesh(
+              geometry.clone().scale(0.42, 0.42, 0.42),
+              new THREE.MeshBasicMaterial({
+                color: 0xfff8f2,
+                transparent: true,
+                opacity: data.geom === 'framework' ? 0.68 : 0.54
+              })
+            );
+            group.add(inner);
+            group.userData.inner = inner;
           }
+
+          const light = new THREE.PointLight(data.color, 0.9, 9);
+          light.position.y = 1.0;
+          group.add(light);
+
+          nodes[id] = {
+            id,
+            data,
+            group,
+            mesh,
+            material,
+            light,
+            baseY: data.pos.y
+          };
+
+          scene.add(group);
+        }
+
+        function createConnection(aId, bId) {
+          const a = ECO_DATA[aId];
+          const b = ECO_DATA[bId];
+          const start = new THREE.Vector3(a.pos.x, a.pos.y, a.pos.z);
+          const end = new THREE.Vector3(b.pos.x, b.pos.y, b.pos.z);
+          const distance = start.distanceTo(end);
+          const midpoint = start.clone().lerp(end, 0.5);
+          midpoint.y = 2.2 + distance * 0.24;
+
+          const curve = new THREE.QuadraticBezierCurve3(start, midpoint, end);
+          const mixColor = new THREE.Color(a.color).lerp(new THREE.Color(b.color), 0.5);
+
+          const tubeMat = new THREE.MeshBasicMaterial({
+            color: mixColor,
+            transparent: true,
+            opacity: 0.16
+          });
+          const tube = new THREE.Mesh(
+            new THREE.TubeGeometry(curve, 42, 0.055, 8, false),
+            tubeMat
+          );
+          scene.add(tube);
+
+          const particles = [];
+          for (let i = 0; i < 4; i++) {
+            const dotMat = new THREE.MeshBasicMaterial({
+              color: mixColor,
+              transparent: true,
+              opacity: 0.62,
+              blending: THREE.AdditiveBlending
+            });
+            const dot = new THREE.Mesh(
+              new THREE.SphereGeometry(0.13, 10, 10),
+              dotMat
+            );
+            scene.add(dot);
+            particles.push({
+              mesh: dot,
+              material: dotMat,
+              t: i * 0.245,
+              baseSpeed: 0.11 + Math.random() * 0.035,
+              currentSpeed: 0.11,
+              targetSpeed: 0.11,
+              baseOpacity: 0.62
+            });
+          }
+
+          connections.push({
+            nodes: [aId, bId],
+            curve,
+            tube,
+            tubeMat,
+            particles
+          });
+        }
+
+        function createAmbientParticles() {
+          const count = 84;
+          const geometry = new THREE.BufferGeometry();
+          const positions = new Float32Array(count * 3);
+
+          for (let i = 0; i < count; i++) {
+            positions[i*3] = (Math.random() - 0.5) * 17;
+            positions[i*3+1] = Math.random() * 7.5;
+            positions[i*3+2] = (Math.random() - 0.5) * 17;
+          }
+
+          geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+          const material = new THREE.PointsMaterial({
+            size: 0.055,
+            color: 0xd6c9bd,
+            transparent: true,
+            opacity: 0.26,
+            blending: THREE.AdditiveBlending
+          });
+
+          const cloud = new THREE.Points(geometry, material);
+          scene.add(cloud);
+          ambient.push({ cloud, positions });
+        }
+
+        function setupInteractions() {
+          renderer.domElement.addEventListener('pointermove', event => {
+            const rect = renderer.domElement.getBoundingClientRect();
+            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+            targetPointer.copy(pointer);
+            handleRaycast();
+          });
+
+          renderer.domElement.addEventListener('pointerleave', () => {
+            targetPointer.set(0, 0);
+            if (!activeNodeId) setHover(null);
+          });
+
+          renderer.domElement.addEventListener('pointerdown', () => {
+            if (hoverNodeId) {
+              toggleNode(hoverNodeId);
+            } else if (activeNodeId) {
+              activeNodeId = null;
+              applyVisualState();
+            }
+          });
+
+          controls.forEach(control => {
+            const id = control.dataset.knowledgeNode;
+            control.addEventListener('mouseenter', () => {
+              if (!activeNodeId) setHover(id);
+            });
+            control.addEventListener('mouseleave', () => {
+              if (!activeNodeId) setHover(null);
+            });
+            control.addEventListener('focus', () => {
+              if (!activeNodeId) setHover(id);
+            });
+            control.addEventListener('blur', () => {
+              if (!activeNodeId) setHover(null);
+            });
+            control.addEventListener('click', () => toggleNode(id));
+          });
+
+          motionButton.addEventListener('click', () => {
+            motionPaused = !motionPaused;
+            updateMotionButton();
+          });
+
+          reducedMotion.addEventListener('change', event => {
+            if (event.matches) motionPaused = true;
+            updateMotionButton();
+          });
+
+          window.addEventListener('resize', resize, { passive: true });
+
+          if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver(entries => {
+              stageVisible = entries[0] ? entries[0].isIntersecting : true;
+            }, { rootMargin: '180px 0px' });
+            observer.observe(stage);
+          }
+        }
+
+        function handleRaycast() {
+          raycaster.setFromCamera(pointer, camera);
+          const meshes = [];
+          Object.values(nodes).forEach(node => {
+            node.group.traverse(object => {
+              if (object.isMesh && object.userData && object.userData.isNode) meshes.push(object);
+            });
+          });
+
+          const hit = raycaster.intersectObjects(meshes, false)[0];
+          const id = hit ? hit.object.userData.id : null;
+          renderer.domElement.style.cursor = id ? 'pointer' : 'default';
+          if (!activeNodeId) setHover(id);
+        }
+
+        function setHover(id) {
+          if (hoverNodeId === id) return;
+          hoverNodeId = id;
+          applyVisualState();
+        }
+
+        function toggleNode(id) {
+          activeNodeId = activeNodeId === id ? null : id;
+          hoverNodeId = activeNodeId || hoverNodeId;
+          applyVisualState();
+        }
+
+        function applyVisualState() {
+          const targetId = activeNodeId || hoverNodeId;
+
+          Object.entries(nodes).forEach(([id, node]) => {
+            const selected = targetId === id;
+            const neutral = !targetId;
+            node.material.emissiveIntensity = neutral ? 0.22 : selected ? 0.7 : 0.08;
+            node.material.opacity = neutral ? 0.88 : selected ? 1 : 0.28;
+            node.group.scale.setScalar(neutral ? 1 : selected ? 1.14 : 0.9);
+            node.light.intensity = neutral ? 0.9 : selected ? 1.55 : 0.26;
+          });
+
+          controls.forEach(control => {
+            const id = control.dataset.knowledgeNode;
+            control.setAttribute('aria-pressed', activeNodeId === id ? 'true' : 'false');
+            control.style.opacity = !targetId || targetId === id ? '1' : '0.34';
+          });
+
+          connections.forEach(connection => {
+            const related = !targetId || connection.nodes.includes(targetId);
+            connection.tubeMat.opacity = related ? (targetId ? 0.34 : 0.16) : 0.035;
+            connection.particles.forEach(particle => {
+              particle.material.opacity = related ? (targetId ? 0.98 : particle.baseOpacity) : 0.06;
+              particle.targetSpeed = related
+                ? particle.baseSpeed * (targetId ? 2.6 : 1)
+                : particle.baseSpeed * 0.32;
+            });
+          });
+        }
+
+        function updateMotionButton() {
+          motionButton.setAttribute('aria-pressed', motionPaused ? 'true' : 'false');
+          motionButton.textContent = motionPaused ? 'Resume motion' : 'Pause motion';
         }
 
         function resize() {
           const rect = stage.getBoundingClientRect();
-          width = Math.max(1, Math.floor(rect.width));
-          height = Math.max(1, Math.floor(rect.height));
-          canvas.width = Math.floor(width * dpr);
-          canvas.height = Math.floor(height * dpr);
-          canvas.style.width = width + 'px';
-          canvas.style.height = height + 'px';
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const width = Math.max(1, rect.width);
+          const height = Math.max(1, rect.height);
+          renderer.setSize(width, height, false);
+
+          const aspect = width / height;
+          const d = height > width ? 10.6 : 8.7;
+          camera.left = -d * aspect;
+          camera.right = d * aspect;
+          camera.top = d;
+          camera.bottom = -d;
+          camera.updateProjectionMatrix();
         }
 
-        function drawGround(cam) {
-          const gridAlpha = 0.12;
-          for (let i = -4; i <= 4; i++) {
-            const a = project(vec(i,0,-3.1),cam);
-            const b = project(vec(i,0,3.1),cam);
-            const c = project(vec(-4,0,i*0.75),cam);
-            const d = project(vec(4,0,i*0.75),cam);
-            ctx.strokeStyle = 'rgba(243,240,234,' + gridAlpha + ')';
-            ctx.lineWidth = 0.7;
-            ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-            ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(d.x,d.y);ctx.stroke();
-          }
-
-          const rings = [1.0,1.6,2.25,2.9,3.55];
-          rings.forEach((r, index) => {
-            const pts=[];
-            for(let i=0;i<=80;i++){
-              const a=i/80*Math.PI*2;
-              pts.push(project(vec(Math.cos(a)*r,0.012,Math.sin(a)*r*0.72),cam));
-            }
-            ctx.strokeStyle = 'rgba(184,98,50,' + (0.045 + index*0.008) + ')';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
-            ctx.stroke();
-          });
-        }
-
-        function drawRoutes(cam) {
-          const segments = [];
-          const focus = active || hover;
-
-          routes.forEach((route, routeIndex) => {
-            const related = !focus || route[0] === focus || route[1] === focus;
-            for(let lane=0;lane<3;lane++){
-              let previous = routePoint(route,0,lane);
-              for(let i=1;i<=72;i++){
-                const t=i/72;
-                const point=routePoint(route,t,lane);
-                const p=project(previous,cam), q=project(point,cam);
-                segments.push({
-                  p,q,
-                  z:(p.z+q.z)/2,
-                  alpha:related ? (lane===1?0.54:0.34) : 0.07,
-                  width:(lane===1?3.2:1.65)*((p.s+q.s)/2)*0.34
-                });
-                previous=point;
-              }
-            }
-
-            if (!paused && related) {
-              for(let pulse=0;pulse<3;pulse++){
-                const direction = pulse === 1 ? -1 : 1;
-                const t = ((elapsed*0.00008*direction + pulse*0.31 + routeIndex*0.13)%1+1)%1;
-                const point = routePoint(route,t,pulse%3);
-                const p=project(point,cam);
-                segments.push({pulse:true,p,z:p.z,r:clamp(2.5*p.s,2.8,5.8),alpha:focus?0.94:0.72});
-              }
-            }
-          });
-
-          segments.sort((a,b)=>b.z-a.z);
-          segments.forEach(seg=>{
-            if(seg.pulse){
-              const g=ctx.createRadialGradient(seg.p.x,seg.p.y,0,seg.p.x,seg.p.y,seg.r*3.2);
-              g.addColorStop(0,'rgba(226,162,124,' + seg.alpha + ')');
-              g.addColorStop(.28,'rgba(201,121,75,' + (seg.alpha*.72) + ')');
-              g.addColorStop(1,'rgba(201,121,75,0)');
-              ctx.fillStyle=g;
-              ctx.beginPath();ctx.arc(seg.p.x,seg.p.y,seg.r*3.2,0,Math.PI*2);ctx.fill();
-              return;
-            }
-            ctx.save();
-            ctx.globalAlpha=seg.alpha;
-            ctx.strokeStyle=palette.accentBright;
-            ctx.lineCap='round';
-            ctx.lineWidth=Math.max(.7,seg.width);
-            ctx.beginPath();ctx.moveTo(seg.p.x,seg.p.y);ctx.lineTo(seg.q.x,seg.q.y);ctx.stroke();
-            ctx.strokeStyle='rgba(243,240,234,.34)';
-            ctx.lineWidth=Math.max(.35,seg.width*.22);
-            ctx.beginPath();ctx.moveTo(seg.p.x,seg.p.y-0.7);ctx.lineTo(seg.q.x,seg.q.y-0.7);ctx.stroke();
-            ctx.restore();
-          });
-        }
-
-        function updateControls(cam) {
-          controls.forEach(control => {
-            const key = control.dataset.knowledgeNode;
-            const n = nodes[key];
-            const p = project(vec(n.x, n.y + 1.25, n.z), cam);
-            projectedNodes[key] = project(vec(n.x, n.y + 0.46, n.z), cam);
-            control.style.left = p.x + 'px';
-            control.style.top = p.y + 'px';
-            control.setAttribute('aria-pressed', active === key ? 'true' : 'false');
-          });
-        }
-
-        function render(now) {
-          if (!paused) elapsed += Math.min(32, now - lastTime);
-          lastTime = now;
-          if (!visible) {
-            requestAnimationFrame(render);
-            return;
-          }
-
-          const cam = camera();
-          ctx.clearRect(0,0,width,height);
-          drawGround(cam);
-          drawRoutes(cam);
-
-          Object.keys(nodes)
-            .map(key => ({key, depth:project(vec(nodes[key].x,nodes[key].y+.45,nodes[key].z),cam).z}))
-            .sort((a,b)=>b.depth-a.depth)
-            .forEach(item=>drawNode(item.key,cam));
-
-          updateControls(cam);
-          requestAnimationFrame(render);
-        }
-
-        function toggleKey(key) {
-          active = active === key ? null : key;
-          hover = active;
-          controls.forEach(control => control.setAttribute('aria-pressed', active === control.dataset.knowledgeNode ? 'true' : 'false'));
-        }
-
-        controls.forEach(control => {
-          const key = control.dataset.knowledgeNode;
-          control.addEventListener('mouseenter',()=>{ if(!active) hover=key; });
-          control.addEventListener('mouseleave',()=>{ if(!active) hover=null; });
-          control.addEventListener('focus',()=>{ if(!active) hover=key; });
-          control.addEventListener('blur',()=>{ if(!active) hover=null; });
-          control.addEventListener('click',()=>toggleKey(key));
-        });
-
-        stage.addEventListener('pointermove', event => {
+        function syncLabels() {
           const rect = stage.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          pointer.inside = true;
-          pointer.x = (x / rect.width - 0.5) * 2;
-          pointer.y = (y / rect.height - 0.5) * 2;
+          Object.entries(nodes).forEach(([id, node]) => {
+            const world = new THREE.Vector3();
+            node.group.getWorldPosition(world);
+            world.y += 2.15;
+            world.project(camera);
 
-          if (!active) {
-            let nearest = null;
-            let distance = 46;
-            Object.entries(projectedNodes).forEach(([key,p])=>{
-              const d = Math.hypot(x-p.x,y-p.y);
-              if(d<distance){distance=d;nearest=key;}
-            });
-            hover = nearest;
-          }
-        });
-
-        stage.addEventListener('pointerleave',()=>{
-          pointer.inside=false;
-          pointer.x=0;
-          pointer.y=0;
-          if(!active) hover=null;
-        });
-
-        canvas.addEventListener('click', event => {
-          const rect = canvas.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          let nearest = null;
-          let distance = 48;
-          Object.entries(projectedNodes).forEach(([key,p])=>{
-            const d = Math.hypot(x-p.x,y-p.y);
-            if(d<distance){distance=d;nearest=key;}
+            const x = (world.x * 0.5 + 0.5) * rect.width;
+            const y = (-world.y * 0.5 + 0.5) * rect.height;
+            const control = controls.find(item => item.dataset.knowledgeNode === id);
+            if (control) {
+              control.style.left = x + 'px';
+              control.style.top = y + 'px';
+            }
           });
-          if(nearest) toggleKey(nearest);
-          else {active=null;hover=null;}
-        });
-
-        motionButton.addEventListener('click',()=>{
-          paused = !paused;
-          motionButton.setAttribute('aria-pressed', paused ? 'true' : 'false');
-          motionButton.textContent = paused ? 'Resume motion' : 'Pause motion';
-        });
-
-        reducedMotion.addEventListener('change', event => {
-          if(event.matches){
-            paused=true;
-            motionButton.setAttribute('aria-pressed','true');
-            motionButton.textContent='Resume motion';
-          }
-        });
-
-        if ('IntersectionObserver' in window) {
-          const observer = new IntersectionObserver(entries => {
-            visible = entries[0] ? entries[0].isIntersecting : true;
-          }, { rootMargin: '160px 0px' });
-          observer.observe(stage);
         }
 
-        window.addEventListener('resize', resize, {passive:true});
-        resize();
-        motionButton.setAttribute('aria-pressed', paused ? 'true' : 'false');
-        motionButton.textContent = paused ? 'Resume motion' : 'Pause motion';
-        requestAnimationFrame(render);
+        function animate() {
+          requestAnimationFrame(animate);
+          if (!stageVisible) return;
+
+          const delta = Math.min(clock.getDelta(), 0.034);
+          const time = clock.getElapsedTime();
+          const motionDelta = motionPaused ? 0 : delta;
+
+          camera.position.x += ((cameraBase.x + targetPointer.x * 1.25) - camera.position.x) * delta * 2.2;
+          camera.position.z += ((cameraBase.z - targetPointer.y * 1.2) - camera.position.z) * delta * 2.2;
+          camera.position.y += ((cameraBase.y + targetPointer.y * 0.55) - camera.position.y) * delta * 2.2;
+          camera.lookAt(0, 0.8, 0);
+
+          Object.entries(nodes).forEach(([id, node]) => {
+            const selected = activeNodeId === id;
+            const float = motionPaused ? 0 : Math.sin(time * 1.6 + node.group.position.x) * 0.14;
+            const targetY = node.baseY + float + (selected ? 0.72 : 0);
+            node.group.position.y += (targetY - node.group.position.y) * delta * 4.5;
+
+            if (!motionPaused) {
+              if (node.data.geom === 'crystal') node.group.rotation.y += motionDelta * 0.34;
+              if (node.data.geom === 'framework') {
+                node.group.rotation.y += motionDelta * 0.28;
+                node.group.rotation.x += motionDelta * 0.15;
+              }
+              if (node.data.geom === 'stack') node.group.rotation.y = Math.sin(time * 0.7) * 0.16;
+              if (node.group.userData.inner && selected) {
+                node.group.userData.inner.rotation.y += motionDelta * 1.8;
+                node.group.userData.inner.rotation.x += motionDelta * 0.8;
+              }
+            }
+          });
+
+          connections.forEach(connection => {
+            connection.particles.forEach(particle => {
+              particle.currentSpeed += (particle.targetSpeed - particle.currentSpeed) * delta * 4.5;
+              if (!motionPaused) {
+                particle.t += particle.currentSpeed * motionDelta;
+                if (particle.t > 1) particle.t -= 1;
+              }
+              const pos = connection.curve.getPointAt(particle.t);
+              particle.mesh.position.copy(pos);
+              const scale = 0.9 + Math.sin(particle.t * Math.PI) * 0.7;
+              particle.mesh.scale.setScalar(scale);
+            });
+          });
+
+          ambient.forEach(item => {
+            if (!motionPaused) {
+              const positions = item.cloud.geometry.attributes.position.array;
+              for (let i = 1; i < positions.length; i += 3) {
+                positions[i] += motionDelta * 0.18;
+                if (positions[i] > 8.5) positions[i] = -0.6;
+              }
+              item.cloud.geometry.attributes.position.needsUpdate = true;
+              item.cloud.rotation.y += motionDelta * 0.02;
+            }
+          });
+
+          syncLabels();
+          renderer.render(scene, camera);
+        }
+
+        applyVisualState();
       })();
     </script>
   </body>
