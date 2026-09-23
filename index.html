@@ -16,6 +16,10 @@
         --line-strong: #bbb2a7;
         --accent: #b86232;
         --accent-soft: rgba(184, 98, 50, 0.1);
+        --night: #111315;
+        --night-soft: #171a1d;
+        --night-line: rgba(243, 240, 234, 0.13);
+        --night-muted: #9da3aa;
         --max-width: 1120px;
       }
 
@@ -34,6 +38,7 @@
         background:
           radial-gradient(circle at 82% 13%, rgba(184, 98, 50, 0.06), transparent 25rem),
           var(--paper);
+        overflow-x: hidden;
       }
 
       body::before {
@@ -52,10 +57,23 @@
       }
 
       a { color: inherit; }
+      button { font: inherit; }
 
       .shell {
         width: min(calc(100% - 48px), var(--max-width));
         margin: 0 auto;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       .site-header {
@@ -302,6 +320,187 @@
         line-height: 1.6;
       }
 
+
+      .knowledge-section {
+        position: relative;
+        left: 50%;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-top: clamp(72px, 9vw, 122px);
+        color: var(--paper-soft);
+        background:
+          linear-gradient(180deg, var(--paper) 0, #24201d 8.5rem, var(--night) 15rem, var(--night) calc(100% - 12rem), #25211e calc(100% - 6rem), var(--paper) 100%);
+        overflow: hidden;
+      }
+
+      .knowledge-section::before {
+        content: "";
+        position: absolute;
+        inset: 11rem 0 9rem;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 20% 28%, rgba(184, 98, 50, 0.14), transparent 27rem),
+          radial-gradient(circle at 82% 70%, rgba(243, 240, 234, 0.055), transparent 28rem);
+      }
+
+      .knowledge-inner {
+        position: relative;
+        z-index: 1;
+        width: min(calc(100% - 48px), var(--max-width));
+        margin: 0 auto;
+        padding: clamp(12rem, 16vw, 15rem) 0 clamp(11rem, 15vw, 14rem);
+      }
+
+      .knowledge-header {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1.1fr);
+        gap: clamp(44px, 8vw, 112px);
+        align-items: end;
+        margin-bottom: clamp(36px, 5vw, 66px);
+      }
+
+      .knowledge-eyebrow,
+      .knowledge-node,
+      .knowledge-motion {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .knowledge-eyebrow {
+        margin: 0 0 18px;
+        color: #d48a5d;
+        font-size: 0.67rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .knowledge-heading {
+        max-width: 640px;
+        margin: 0;
+        font-size: clamp(2.5rem, 5.2vw, 5.8rem);
+        font-weight: 480;
+        letter-spacing: -0.06em;
+        line-height: 0.98;
+      }
+
+      .knowledge-heading em {
+        color: #d48a5d;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
+      }
+
+      .knowledge-copy {
+        max-width: 520px;
+        margin: 0 0 4px;
+        color: var(--night-muted);
+        font-size: clamp(1rem, 1.3vw, 1.14rem);
+        line-height: 1.75;
+      }
+
+      .knowledge-stage {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9.4;
+        min-height: 510px;
+        border-top: 1px solid var(--night-line);
+        border-bottom: 1px solid var(--night-line);
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .knowledge-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(circle at 50% 48%, rgba(184, 98, 50, 0.055), transparent 34%),
+          linear-gradient(180deg, rgba(255,255,255,0.018), transparent 48%, rgba(255,255,255,0.012));
+      }
+
+      #knowledge-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .knowledge-node {
+        position: absolute;
+        z-index: 4;
+        transform: translate(-50%, -50%);
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 11px;
+        border: 1px solid rgba(243, 240, 234, 0.16);
+        border-radius: 999px;
+        background: rgba(17, 19, 21, 0.62);
+        color: rgba(243, 240, 234, 0.63);
+        font-size: clamp(0.67rem, 1vw, 0.78rem);
+        font-weight: 700;
+        letter-spacing: 0.015em;
+        cursor: pointer;
+        opacity: 0.86;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+        transition: color 180ms ease, border-color 180ms ease, background 180ms ease, opacity 180ms ease, transform 180ms ease;
+      }
+
+      .knowledge-node:hover,
+      .knowledge-node[aria-pressed="true"] {
+        color: var(--paper-soft);
+        border-color: rgba(212, 138, 93, 0.74);
+        background: rgba(40, 31, 27, 0.82);
+        opacity: 1;
+        transform: translate(-50%, -58%) scale(1.04);
+      }
+
+      .knowledge-node:focus-visible,
+      .knowledge-motion:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+
+      .knowledge-motion {
+        position: absolute;
+        z-index: 4;
+        right: 4px;
+        top: 14px;
+        min-height: 40px;
+        padding: 7px 11px;
+        border: 1px solid var(--night-line);
+        border-radius: 999px;
+        background: rgba(17, 19, 21, 0.56);
+        color: var(--night-muted);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .knowledge-motion:hover {
+        color: var(--paper-soft);
+        border-color: rgba(243, 240, 234, 0.3);
+      }
+
+      .knowledge-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 18px;
+        color: #777f88;
+        font-size: 0.74rem;
+        line-height: 1.6;
+      }
+
+      .knowledge-caption p { margin: 0; }
+
+      .knowledge-caption .loop {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        white-space: nowrap;
+      }
+
       .site-footer {
         display: flex;
         align-items: center;
@@ -365,6 +564,58 @@
           align-items: flex-start;
           flex-direction: column;
           gap: 20px;
+        }
+      }
+
+
+      @media (max-width: 900px) {
+        .knowledge-header {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+
+        .knowledge-copy {
+          max-width: 660px;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .knowledge-inner {
+          width: min(calc(100% - 30px), var(--max-width));
+        }
+
+        .knowledge-section {
+          margin-top: 64px;
+          background:
+            linear-gradient(180deg, var(--paper) 0, #24201d 7rem, var(--night) 12.5rem, var(--night) calc(100% - 9rem), #25211e calc(100% - 4rem), var(--paper) 100%);
+        }
+
+        .knowledge-inner {
+          padding: 10.5rem 0 9.5rem;
+        }
+
+        .knowledge-heading {
+          font-size: clamp(2.7rem, 12vw, 4.4rem);
+        }
+
+        .knowledge-stage {
+          aspect-ratio: 4 / 5.1;
+          min-height: 620px;
+        }
+
+        .knowledge-node {
+          font-size: 0.64rem;
+          padding: 7px 9px;
+        }
+
+        .knowledge-caption {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 7px;
+        }
+
+        .knowledge-caption .loop {
+          white-space: normal;
         }
       }
 
@@ -459,6 +710,36 @@
             </article>
           </div>
         </section>
+
+
+        <section class="knowledge-section" aria-labelledby="knowledge-heading">
+          <div class="knowledge-inner">
+            <header class="knowledge-header">
+              <div>
+                <p class="knowledge-eyebrow">A living knowledge system</p>
+                <h2 class="knowledge-heading" id="knowledge-heading">Different roles.<br>One <em>learning loop.</em></h2>
+              </div>
+              <p class="knowledge-copy" id="knowledge-description">Practice creates experience. Reflection preserves change. Field knowledge captures what works in context. Principles and patterns make that understanding reusable. Each feeds the others.</p>
+            </header>
+
+            <figure class="knowledge-stage" id="knowledge-stage">
+              <canvas id="knowledge-canvas" role="img" aria-describedby="knowledge-description"></canvas>
+
+              <button class="knowledge-node" type="button" data-knowledge-node="practice" aria-pressed="false">Practice</button>
+              <button class="knowledge-node" type="button" data-knowledge-node="reflection" aria-pressed="false">Reflection</button>
+              <button class="knowledge-node" type="button" data-knowledge-node="field" aria-pressed="false">Field Knowledge</button>
+              <button class="knowledge-node" type="button" data-knowledge-node="principles" aria-pressed="false">Principles &amp; Patterns</button>
+
+              <button class="knowledge-motion" id="knowledge-motion" type="button" aria-pressed="false">Pause motion</button>
+              <figcaption class="sr-only">A tilted three-dimensional field where four roles are joined by woven, continuously circulating paths. Selecting a role emphasizes its relationships with the rest of the system.</figcaption>
+            </figure>
+
+            <div class="knowledge-caption" aria-hidden="true">
+              <p>Not a pipeline. A shared field of practice, memory, context, and reusable insight.</p>
+              <p class="loop">practice ↔ reflection ↔ field knowledge ↔ principles &amp; patterns</p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer class="site-footer">
@@ -466,5 +747,433 @@
         <a class="github-link" href="https://github.com/f3tknco" target="_blank" rel="noreferrer">github.com/f3tknco <span aria-hidden="true">↗</span></a>
       </footer>
     </div>
+
+    <script>
+      (() => {
+        const stage = document.getElementById('knowledge-stage');
+        const canvas = document.getElementById('knowledge-canvas');
+        const ctx = canvas.getContext('2d');
+        const controls = [...stage.querySelectorAll('[data-knowledge-node]')];
+        const motionButton = document.getElementById('knowledge-motion');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        const palette = {
+          accent: '#c9794b',
+          accentBright: '#e2a27c'
+        };
+
+        const nodes = {
+          practice: { x: -2.75, y: 0.12, z: -1.68, shape: 'blocks' },
+          reflection: { x: 2.65, y: 0.15, z: -1.5, shape: 'layers' },
+          field: { x: 2.48, y: 0.12, z: 1.72, shape: 'frame' },
+          principles: { x: -2.48, y: 0.16, z: 1.7, shape: 'lattice' }
+        };
+
+        const routes = [
+          ['practice', 'reflection', 1.35, -0.15],
+          ['reflection', 'field', 1.18, 0.16],
+          ['field', 'principles', 1.38, -0.12],
+          ['principles', 'practice', 1.14, 0.12],
+          ['practice', 'field', 1.78, 0.48],
+          ['reflection', 'principles', 1.56, -0.44]
+        ];
+
+        let width = 1;
+        let height = 1;
+        let active = null;
+        let hover = null;
+        let paused = reducedMotion.matches;
+        let visible = true;
+        let lastTime = performance.now();
+        let elapsed = 0;
+        const pointer = { x: 0, y: 0, inside: false };
+        const projectedNodes = {};
+
+        function vec(x = 0, y = 0, z = 0) { return { x, y, z }; }
+        function add(a, b) { return vec(a.x + b.x, a.y + b.y, a.z + b.z); }
+        function sub(a, b) { return vec(a.x - b.x, a.y - b.y, a.z - b.z); }
+        function scale(a, s) { return vec(a.x * s, a.y * s, a.z * s); }
+        function dot(a, b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+        function cross(a, b) { return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x); }
+        function length(a) { return Math.hypot(a.x, a.y, a.z) || 1; }
+        function norm(a) { return scale(a, 1 / length(a)); }
+        function mix(a, b, t) { return add(scale(a, 1 - t), scale(b, t)); }
+        function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+        function camera() {
+          const px = pointer.inside ? pointer.x : 0;
+          const py = pointer.inside ? pointer.y : 0;
+          const pos = vec(px * 0.54, 5.25 - py * 0.26, 8.35);
+          const target = vec(px * 0.14, 0.58 + py * 0.08, 0);
+          const forward = norm(sub(target, pos));
+          const right = norm(cross(forward, vec(0, 1, 0)));
+          const up = norm(cross(right, forward));
+          return { pos, forward, right, up, focal: 6.9 };
+        }
+
+        function project(point, cam) {
+          const rel = sub(point, cam.pos);
+          const cx = dot(rel, cam.right);
+          const cy = dot(rel, cam.up);
+          const cz = dot(rel, cam.forward);
+          const s = cam.focal / Math.max(0.28, cz);
+          const unit = Math.min(width, height) * 0.112;
+          return { x: width * 0.5 + cx * s * unit, y: height * 0.53 - cy * s * unit, z: cz, s };
+        }
+
+        function cubic(a, b, c, d, t) {
+          const u = 1 - t;
+          return vec(
+            u*u*u*a.x + 3*u*u*t*b.x + 3*u*t*t*c.x + t*t*t*d.x,
+            u*u*u*a.y + 3*u*u*t*b.y + 3*u*t*t*c.y + t*t*t*d.y,
+            u*u*u*a.z + 3*u*u*t*b.z + 3*u*t*t*c.z + t*t*t*d.z
+          );
+        }
+
+        function routePoint(route, t, lane = 0) {
+          const [aKey, bKey, heightLift, bend] = route;
+          const a = nodes[aKey];
+          const b = nodes[bKey];
+          const start = vec(a.x, a.y + 0.62, a.z);
+          const end = vec(b.x, b.y + 0.62, b.z);
+          const mid = mix(start, end, 0.5);
+          const dx = end.x - start.x;
+          const dz = end.z - start.z;
+          const sideways = norm(vec(-dz, 0, dx));
+          const laneOffset = (lane - 1) * 0.095;
+          const c1 = add(mix(start, mid, 0.56), add(scale(sideways, bend + laneOffset), vec(0, heightLift, 0)));
+          const c2 = add(mix(mid, end, 0.44), add(scale(sideways, bend + laneOffset), vec(0, heightLift * 0.92, 0)));
+          const base = cubic(start, c1, c2, end, t);
+          const ripple = Math.sin(t * Math.PI * 4 + lane * 2.1 + elapsed * 0.0008) * 0.045 * Math.sin(Math.PI * t);
+          return add(base, scale(sideways, ripple));
+        }
+
+        function face(points, fill, stroke, cam, alpha = 1) {
+          const p = points.map(v => project(v, cam));
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.beginPath();
+          ctx.moveTo(p[0].x, p[0].y);
+          for (let i = 1; i < p.length; i++) ctx.lineTo(p[i].x, p[i].y);
+          ctx.closePath();
+          ctx.fillStyle = fill;
+          ctx.fill();
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        function drawCuboid(center, size, cam, alpha) {
+          const x = size.x / 2, z = size.z / 2, y0 = center.y, y1 = center.y + size.y;
+          const v = {
+            a: vec(center.x-x,y0,center.z-z), b: vec(center.x+x,y0,center.z-z), c: vec(center.x+x,y0,center.z+z), d: vec(center.x-x,y0,center.z+z),
+            A: vec(center.x-x,y1,center.z-z), B: vec(center.x+x,y1,center.z-z), C: vec(center.x+x,y1,center.z+z), D: vec(center.x-x,y1,center.z+z)
+          };
+          face([v.A,v.B,v.C,v.D], 'rgba(243,240,234,.70)', null, cam, alpha);
+          face([v.B,v.b,v.c,v.C], 'rgba(184,98,50,.38)', null, cam, alpha);
+          face([v.D,v.C,v.c,v.d], 'rgba(91,77,69,.45)', null, cam, alpha);
+        }
+
+        function drawLayers(n, cam, alpha) {
+          for (let i = 0; i < 3; i++) {
+            const y = n.y + 0.12 + i * 0.19;
+            const r = 0.46 - i * 0.025;
+            const pts = [];
+            for (let s = 0; s < 28; s++) {
+              const a = s / 28 * Math.PI * 2;
+              pts.push(vec(n.x + Math.cos(a) * r, y, n.z + Math.sin(a) * r * 0.78));
+            }
+            face(pts, i === 2 ? 'rgba(243,240,234,.64)' : 'rgba(184,98,50,.28)', 'rgba(243,240,234,.12)', cam, alpha);
+          }
+        }
+
+        function drawFrame(n, cam, alpha) {
+          const y = n.y + 0.18;
+          const outer = 0.5;
+          const inner = 0.28;
+          const pts = [
+            vec(n.x-outer,y,n.z-outer),vec(n.x+outer,y,n.z-outer),vec(n.x+outer,y,n.z+outer),vec(n.x-outer,y,n.z+outer),
+            vec(n.x-inner,y,n.z-inner),vec(n.x+inner,y,n.z-inner),vec(n.x+inner,y,n.z+inner),vec(n.x-inner,y,n.z+inner)
+          ].map(p => project(p, cam));
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = 'rgba(243,240,234,.56)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          [0,1,2,3,0].forEach((idx,i) => i ? ctx.lineTo(pts[idx].x,pts[idx].y) : ctx.moveTo(pts[idx].x,pts[idx].y));
+          [4,5,6,7,4].forEach((idx,i) => i ? ctx.lineTo(pts[idx].x,pts[idx].y) : ctx.moveTo(pts[idx].x,pts[idx].y));
+          for(let i=0;i<4;i++){ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[i+4].x,pts[i+4].y);}
+          ctx.stroke();
+          ctx.restore();
+          drawCuboid(vec(n.x-0.15,n.y,n.z-0.15), {x:0.3,y:0.56,z:0.3}, cam, alpha * 0.8);
+        }
+
+        function drawLattice(n, cam, alpha) {
+          const top = vec(n.x, n.y + 0.94, n.z);
+          const ring = [];
+          for(let i=0;i<5;i++){
+            const a = i/5*Math.PI*2 - Math.PI/2;
+            ring.push(vec(n.x + Math.cos(a)*0.48, n.y + 0.18, n.z + Math.sin(a)*0.43));
+          }
+          for(let i=0;i<5;i++){
+            face([top, ring[i], ring[(i+1)%5]], i%2 ? 'rgba(184,98,50,.34)' : 'rgba(243,240,234,.52)', 'rgba(243,240,234,.10)', cam, alpha);
+          }
+        }
+
+        function drawNode(key, cam) {
+          const n = nodes[key];
+          const focus = active || hover;
+          const selected = focus === key;
+          const alpha = focus && !selected ? 0.32 : 1;
+          const ground = project(vec(n.x, 0.02, n.z), cam);
+
+          ctx.save();
+          ctx.globalAlpha = alpha * 0.22;
+          ctx.fillStyle = '#000';
+          ctx.beginPath();
+          ctx.ellipse(ground.x, ground.y, 34 * ground.s * 0.32, 11 * ground.s * 0.32, 0, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+
+          if (selected) {
+            const p = project(vec(n.x, n.y + 0.5, n.z), cam);
+            const glow = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,58);
+            glow.addColorStop(0,'rgba(201,121,75,.20)');
+            glow.addColorStop(1,'rgba(201,121,75,0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,58,0,Math.PI*2);
+            ctx.fill();
+          }
+
+          if (n.shape === 'blocks') {
+            drawCuboid(vec(n.x-0.18,n.y,n.z+0.06), {x:0.46,y:0.62,z:0.46}, cam, alpha);
+            drawCuboid(vec(n.x+0.22,n.y+0.03,n.z-0.08), {x:0.34,y:0.44,z:0.34}, cam, alpha*0.86);
+          } else if (n.shape === 'layers') {
+            drawLayers(n, cam, alpha);
+          } else if (n.shape === 'frame') {
+            drawFrame(n, cam, alpha);
+          } else {
+            drawLattice(n, cam, alpha);
+          }
+        }
+
+        function resize() {
+          const rect = stage.getBoundingClientRect();
+          width = Math.max(1, Math.floor(rect.width));
+          height = Math.max(1, Math.floor(rect.height));
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = width + 'px';
+          canvas.style.height = height + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function drawGround(cam) {
+          const gridAlpha = 0.12;
+          for (let i = -4; i <= 4; i++) {
+            const a = project(vec(i,0,-3.1),cam);
+            const b = project(vec(i,0,3.1),cam);
+            const c = project(vec(-4,0,i*0.75),cam);
+            const d = project(vec(4,0,i*0.75),cam);
+            ctx.strokeStyle = 'rgba(243,240,234,' + gridAlpha + ')';
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+            ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(d.x,d.y);ctx.stroke();
+          }
+
+          const rings = [1.0,1.6,2.25,2.9,3.55];
+          rings.forEach((r, index) => {
+            const pts=[];
+            for(let i=0;i<=80;i++){
+              const a=i/80*Math.PI*2;
+              pts.push(project(vec(Math.cos(a)*r,0.012,Math.sin(a)*r*0.72),cam));
+            }
+            ctx.strokeStyle = 'rgba(184,98,50,' + (0.045 + index*0.008) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+            ctx.stroke();
+          });
+        }
+
+        function drawRoutes(cam) {
+          const segments = [];
+          const focus = active || hover;
+
+          routes.forEach((route, routeIndex) => {
+            const related = !focus || route[0] === focus || route[1] === focus;
+            for(let lane=0;lane<3;lane++){
+              let previous = routePoint(route,0,lane);
+              for(let i=1;i<=72;i++){
+                const t=i/72;
+                const point=routePoint(route,t,lane);
+                const p=project(previous,cam), q=project(point,cam);
+                segments.push({
+                  p,q,
+                  z:(p.z+q.z)/2,
+                  alpha:related ? (lane===1?0.54:0.34) : 0.07,
+                  width:(lane===1?3.2:1.65)*((p.s+q.s)/2)*0.34
+                });
+                previous=point;
+              }
+            }
+
+            if (!paused && related) {
+              for(let pulse=0;pulse<3;pulse++){
+                const direction = pulse === 1 ? -1 : 1;
+                const t = ((elapsed*0.00008*direction + pulse*0.31 + routeIndex*0.13)%1+1)%1;
+                const point = routePoint(route,t,pulse%3);
+                const p=project(point,cam);
+                segments.push({pulse:true,p,z:p.z,r:clamp(2.5*p.s,2.8,5.8),alpha:focus?0.94:0.72});
+              }
+            }
+          });
+
+          segments.sort((a,b)=>b.z-a.z);
+          segments.forEach(seg=>{
+            if(seg.pulse){
+              const g=ctx.createRadialGradient(seg.p.x,seg.p.y,0,seg.p.x,seg.p.y,seg.r*3.2);
+              g.addColorStop(0,'rgba(226,162,124,' + seg.alpha + ')');
+              g.addColorStop(.28,'rgba(201,121,75,' + (seg.alpha*.72) + ')');
+              g.addColorStop(1,'rgba(201,121,75,0)');
+              ctx.fillStyle=g;
+              ctx.beginPath();ctx.arc(seg.p.x,seg.p.y,seg.r*3.2,0,Math.PI*2);ctx.fill();
+              return;
+            }
+            ctx.save();
+            ctx.globalAlpha=seg.alpha;
+            ctx.strokeStyle=palette.accentBright;
+            ctx.lineCap='round';
+            ctx.lineWidth=Math.max(.7,seg.width);
+            ctx.beginPath();ctx.moveTo(seg.p.x,seg.p.y);ctx.lineTo(seg.q.x,seg.q.y);ctx.stroke();
+            ctx.strokeStyle='rgba(243,240,234,.34)';
+            ctx.lineWidth=Math.max(.35,seg.width*.22);
+            ctx.beginPath();ctx.moveTo(seg.p.x,seg.p.y-0.7);ctx.lineTo(seg.q.x,seg.q.y-0.7);ctx.stroke();
+            ctx.restore();
+          });
+        }
+
+        function updateControls(cam) {
+          controls.forEach(control => {
+            const key = control.dataset.knowledgeNode;
+            const n = nodes[key];
+            const p = project(vec(n.x, n.y + 1.25, n.z), cam);
+            projectedNodes[key] = project(vec(n.x, n.y + 0.46, n.z), cam);
+            control.style.left = p.x + 'px';
+            control.style.top = p.y + 'px';
+            control.setAttribute('aria-pressed', active === key ? 'true' : 'false');
+          });
+        }
+
+        function render(now) {
+          if (!paused) elapsed += Math.min(32, now - lastTime);
+          lastTime = now;
+          if (!visible) {
+            requestAnimationFrame(render);
+            return;
+          }
+
+          const cam = camera();
+          ctx.clearRect(0,0,width,height);
+          drawGround(cam);
+          drawRoutes(cam);
+
+          Object.keys(nodes)
+            .map(key => ({key, depth:project(vec(nodes[key].x,nodes[key].y+.45,nodes[key].z),cam).z}))
+            .sort((a,b)=>b.depth-a.depth)
+            .forEach(item=>drawNode(item.key,cam));
+
+          updateControls(cam);
+          requestAnimationFrame(render);
+        }
+
+        function toggleKey(key) {
+          active = active === key ? null : key;
+          hover = active;
+          controls.forEach(control => control.setAttribute('aria-pressed', active === control.dataset.knowledgeNode ? 'true' : 'false'));
+        }
+
+        controls.forEach(control => {
+          const key = control.dataset.knowledgeNode;
+          control.addEventListener('mouseenter',()=>{ if(!active) hover=key; });
+          control.addEventListener('mouseleave',()=>{ if(!active) hover=null; });
+          control.addEventListener('focus',()=>{ if(!active) hover=key; });
+          control.addEventListener('blur',()=>{ if(!active) hover=null; });
+          control.addEventListener('click',()=>toggleKey(key));
+        });
+
+        stage.addEventListener('pointermove', event => {
+          const rect = stage.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          pointer.inside = true;
+          pointer.x = (x / rect.width - 0.5) * 2;
+          pointer.y = (y / rect.height - 0.5) * 2;
+
+          if (!active) {
+            let nearest = null;
+            let distance = 46;
+            Object.entries(projectedNodes).forEach(([key,p])=>{
+              const d = Math.hypot(x-p.x,y-p.y);
+              if(d<distance){distance=d;nearest=key;}
+            });
+            hover = nearest;
+          }
+        });
+
+        stage.addEventListener('pointerleave',()=>{
+          pointer.inside=false;
+          pointer.x=0;
+          pointer.y=0;
+          if(!active) hover=null;
+        });
+
+        canvas.addEventListener('click', event => {
+          const rect = canvas.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          let nearest = null;
+          let distance = 48;
+          Object.entries(projectedNodes).forEach(([key,p])=>{
+            const d = Math.hypot(x-p.x,y-p.y);
+            if(d<distance){distance=d;nearest=key;}
+          });
+          if(nearest) toggleKey(nearest);
+          else {active=null;hover=null;}
+        });
+
+        motionButton.addEventListener('click',()=>{
+          paused = !paused;
+          motionButton.setAttribute('aria-pressed', paused ? 'true' : 'false');
+          motionButton.textContent = paused ? 'Resume motion' : 'Pause motion';
+        });
+
+        reducedMotion.addEventListener('change', event => {
+          if(event.matches){
+            paused=true;
+            motionButton.setAttribute('aria-pressed','true');
+            motionButton.textContent='Resume motion';
+          }
+        });
+
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver(entries => {
+            visible = entries[0] ? entries[0].isIntersecting : true;
+          }, { rootMargin: '160px 0px' });
+          observer.observe(stage);
+        }
+
+        window.addEventListener('resize', resize, {passive:true});
+        resize();
+        motionButton.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        motionButton.textContent = paused ? 'Resume motion' : 'Pause motion';
+        requestAnimationFrame(render);
+      })();
+    </script>
   </body>
 </html>
