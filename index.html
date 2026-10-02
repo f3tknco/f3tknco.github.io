@@ -257,7 +257,7 @@
       }
 
       .interests {
-        padding: clamp(12px, 2vw, 20px) 0 clamp(82px, 10vw, 118px);
+        padding: clamp(12px, 2vw, 20px) 0 clamp(56px, 7vw, 82px);
       }
 
       .interests-title {
@@ -304,47 +304,47 @@
 
 
       .patterns {
-        padding: clamp(18px, 3vw, 30px) 0 clamp(90px, 11vw, 132px);
+        padding: clamp(8px, 1.5vw, 16px) 0 0;
       }
 
       .patterns-header {
         display: grid;
-        grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.8fr);
-        gap: clamp(42px, 8vw, 108px);
-        align-items: end;
-        padding-top: 28px;
+        grid-template-columns: minmax(190px, 0.42fr) minmax(0, 1.58fr);
+        gap: clamp(30px, 5vw, 72px);
+        align-items: start;
+        padding: 24px 0 28px;
         border-top: 1px solid var(--line-strong);
       }
 
       .patterns-title {
-        max-width: 650px;
-        margin: 0;
-        font-size: clamp(2.2rem, 4vw, 4rem);
-        font-weight: 500;
-        letter-spacing: -0.05em;
-        line-height: 1.03;
-        text-wrap: balance;
+        margin: 3px 0 0;
+        color: var(--accent);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        line-height: 1.45;
+        text-transform: uppercase;
       }
 
       .patterns-copy {
-        max-width: 510px;
-        margin: 0 0 5px;
-        color: var(--muted);
-        font-size: clamp(1rem, 1.18vw, 1.08rem);
-        line-height: 1.76;
+        max-width: 780px;
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(1.18rem, 1.7vw, 1.48rem);
+        letter-spacing: -0.018em;
+        line-height: 1.5;
       }
 
       .lens-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        margin-top: clamp(42px, 6vw, 68px);
         border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
       }
 
       .lens {
-        min-height: 250px;
-        padding: 28px 28px 32px 0;
+        min-height: 0;
+        padding: 22px 28px 26px 0;
       }
 
       .lens + .lens {
@@ -354,35 +354,35 @@
 
       .lens-index {
         display: block;
-        margin-bottom: 42px;
+        margin-bottom: 16px;
         color: var(--accent);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.66rem;
+        font-size: 0.64rem;
         letter-spacing: 0.06em;
       }
 
       .lens h3 {
-        margin: 0 0 16px;
-        font-size: clamp(1.35rem, 1.8vw, 1.8rem);
-        font-weight: 520;
-        letter-spacing: -0.03em;
-        line-height: 1.12;
+        margin: 0 0 10px;
+        font-size: clamp(1.05rem, 1.35vw, 1.22rem);
+        font-weight: 540;
+        letter-spacing: -0.024em;
+        line-height: 1.24;
       }
 
       .lens p {
         margin: 0;
         color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.72;
+        font-size: 0.9rem;
+        line-height: 1.65;
       }
 
       .lens-terms {
         display: block;
-        margin-top: 20px;
+        margin-top: 14px;
         color: var(--muted);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.72rem;
-        line-height: 1.65;
+        font-size: 0.68rem;
+        line-height: 1.55;
       }
 
 
@@ -391,7 +391,7 @@
         left: 50%;
         width: 100vw;
         margin-left: -50vw;
-        margin-top: clamp(72px, 9vw, 122px);
+        margin-top: clamp(28px, 4vw, 52px);
         color: var(--paper-soft);
         background:
           linear-gradient(180deg, var(--paper) 0, #24201d 8.5rem, var(--night) 15rem, var(--night) calc(100% - 12rem), #25211e calc(100% - 6rem), var(--paper) 100%);
@@ -605,7 +605,7 @@
         }
 
         .interests {
-          padding-bottom: 78px;
+          padding-bottom: 54px;
         }
 
         .interests-title {
@@ -637,11 +637,12 @@
       @media (max-width: 900px) {
         .patterns-header {
           grid-template-columns: 1fr;
-          gap: 24px;
+          gap: 12px;
+          padding-bottom: 24px;
         }
 
         .patterns-copy {
-          max-width: 660px;
+          max-width: 700px;
         }
 
         .lens-grid {
@@ -649,8 +650,7 @@
         }
 
         .lens {
-          min-height: auto;
-          padding: 26px 0 30px;
+          padding: 22px 0 24px;
         }
 
         .lens + .lens {
@@ -660,7 +660,7 @@
         }
 
         .lens-index {
-          margin-bottom: 24px;
+          margin-bottom: 12px;
         }
       }
 
@@ -681,7 +681,7 @@
         }
 
         .knowledge-section {
-          margin-top: 64px;
+          margin-top: 34px;
           background:
             linear-gradient(180deg, var(--paper) 0, #24201d 7rem, var(--night) 12.5rem, var(--night) calc(100% - 9rem), #25211e calc(100% - 4rem), var(--paper) 100%);
         }
@@ -807,31 +807,32 @@
         </section>
 
 
+
         <section class="patterns" aria-labelledby="patterns-heading">
           <header class="patterns-header">
             <h2 class="patterns-title" id="patterns-heading">Same patterns, different lenses.</h2>
-            <p class="patterns-copy">I keep finding the same concerns in different domains: relationships, boundaries, context, feedback, and evolution. The vocabulary changes; the underlying questions often do not.</p>
+            <p class="patterns-copy">Across software, knowledge, and AI, I keep returning to the same questions: how relationships form, where boundaries matter, what context changes, and how feedback drives evolution.</p>
           </header>
 
           <div class="lens-grid">
             <article class="lens">
               <span class="lens-index">01 / SOFTWARE</span>
-              <h3>Systems shape behavior.</h3>
-              <p>Boundaries define responsibility. Flows connect components. Feedback reveals how local decisions affect the whole.</p>
+              <h3>Boundaries and flows shape behavior.</h3>
+              <p>Components make sense through their relationships, responsibilities, and the feedback that moves through the system.</p>
               <span class="lens-terms">boundaries · dependencies · flows · feedback</span>
             </article>
 
             <article class="lens">
               <span class="lens-index">02 / KNOWLEDGE</span>
               <h3>Understanding has a lifecycle.</h3>
-              <p>Experience becomes reflection, context, and reusable principles. Each form preserves something different and changes what can be understood next.</p>
+              <p>Experience becomes reflection, context, and reusable understanding, with each form preserving something different.</p>
               <span class="lens-terms">experience · memory · context · reuse</span>
             </article>
 
             <article class="lens">
               <span class="lens-index">03 / AI</span>
               <h3>Context shapes intelligence in use.</h3>
-              <p>Memory, retrieval, reasoning, and feedback shape what AI can do in the moment. A living knowledge system can improve that context — and AI can help the system grow in return.</p>
+              <p>Memory, retrieval, reasoning, and feedback shape what AI can do now; a living knowledge system can improve that context and grow with it.</p>
               <span class="lens-terms">context · memory · retrieval · reasoning · feedback</span>
             </article>
           </div>
